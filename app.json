@@ -1,5 +1,6 @@
 {
   "expo": {
+    "assetBundlePatterns": ["**/*"],
     "name": "random-map-generator",
     "slug": "random-map-generator",
     "version": "1.0.0",
