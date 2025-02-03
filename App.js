@@ -13,9 +13,11 @@ import Animated, {
 } from 'react-native-reanimated';
 import * as Haptics from "expo-haptics";
 import {ArrowBigLeft} from "lucide-react-native";
+import MapsDisplay from "./components/MapsDisplay";
 
 
 export default function App() {
+
     const {
         map,
         generateMap,
@@ -23,6 +25,7 @@ export default function App() {
         page,
         setPage
     } = useStore();
+
     const [loaded, error] = useFonts({
         'Super-Mario': require('./assets/fonts/SuperMario256.ttf'),
         'ShinGoPro': require('./assets/fonts/AOTFShinGoProRegular.otf'),
@@ -151,7 +154,9 @@ export default function App() {
                             <Animated.Image
                                 source={require('./assets/star.png')}
                                 style={[styles.star, {
-                                    top: Platform.OS === 'ios' ? 50 : StatusBar.currentHeight + 10,
+                                    top: Platform.OS === 'ios'
+                                        ? 50
+                                        : StatusBar.currentHeight + 10,
                                     left: 10,
                                     marginTop: 10,
                                     transform: [
@@ -301,10 +306,20 @@ export default function App() {
                             </View>
                         </View>
                     ) : page === "maps" ? (
-                        <View style={styles.container}>
-                            <Text>Maps</Text>
-                            {/*<MapsCarousel data={data}/>*/}
-                        </View>
+                        <SafeAreaView style={{position: "relative", width: "100%", height: "100%"}}>
+                            <View style={{margin: 20}}>
+                                <Text style={{
+                                    fontFamily: "ShinGoPro-Bold",
+                                    fontSize: 24,
+                                    textAlign: "center",
+                                    color: "black",
+                                    margin: 20,
+                                }}>
+                                    Super Mario Party Jamboree Maps
+                                </Text>
+                                <MapsDisplay/>
+                            </View>
+                        </SafeAreaView>
                     ) : (
                         <View style={styles.container}>
                             <Text>Page not found</Text>
