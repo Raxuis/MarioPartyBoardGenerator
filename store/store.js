@@ -12,12 +12,26 @@ export const useStore = create((set) => ({
     setMap: (map) => set({map}),
     generateMap: (prevMap = null) => {
         if (data.length === 0) return;
-        const randomItem = data[Math.floor(Math.random() * data.length)];
 
-        if (prevMap && randomItem.id === prevMap.id) {
-            return useStore.getState().generateMap(prevMap);
+        if (data.length === 1) {
+            const onlyItem = data[0];
+            set({
+                map: {
+                    id: onlyItem.id ?? Math.random(),
+                    name: onlyItem.name,
+                    description: onlyItem.description,
+                    boardView: onlyItem.boardView,
+                    boardIcon: onlyItem.boardIcon,
+                }
+            });
+            return;
         }
-        
+
+        let randomItem;
+        do {
+            randomItem = data[Math.floor(Math.random() * data.length)];
+        } while (prevMap && randomItem.id === prevMap.id);
+
         set({
             map: {
                 id: randomItem.id ?? Math.random(),
@@ -30,4 +44,13 @@ export const useStore = create((set) => ({
     },
     page: "home",
     setPage: (page) => set({page}),
+    resetMap: () => {
+        useStore.getState().setMap({
+            id: 0,
+            name: "",
+            description: "",
+            boardView: "",
+            boardIcon: ""
+        })
+    }
 }));

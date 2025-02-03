@@ -1,4 +1,4 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import CustomButton from "./components/CustomButton";
 import {useStore} from "./store/store";
 import {useFonts} from "expo-font";
@@ -10,7 +10,6 @@ import Animated, {
     useSharedValue,
     ReduceMotion,
     withRepeat,
-    withSpring
 } from 'react-native-reanimated';
 import * as Haptics from "expo-haptics";
 import {ArrowBigLeft} from "lucide-react-native";
@@ -20,7 +19,7 @@ export default function App() {
     const {
         map,
         generateMap,
-        setMap,
+        resetMap,
         page,
         setPage
     } = useStore();
@@ -40,16 +39,8 @@ export default function App() {
     const height = useSharedValue(0);
     const iconWidth = useSharedValue(180);
     const iconHeight = useSharedValue(180);
+    const infoTranslateX = useSharedValue(0);
 
-    const resetDatas = () => {
-        setMap({
-            id: 0,
-            name: "",
-            description: "",
-            boardView: "",
-            boardIcon: ""
-        })
-    }
 
     const goBack = () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
@@ -71,6 +62,12 @@ export default function App() {
         iconHeight.value = 180;
         iconWidth.value = 180;
     }
+
+    useEffect(() => {
+        if (map.name !== "") {
+            infoTranslateX.value = withTiming(0, {duration: 300});
+        }
+    }, [map])
 
 
     useEffect(() => {
@@ -175,6 +172,7 @@ export default function App() {
                                             height: height,
                                             opacity: opacity,
                                             resizeMode: 'contain',
+                                            transform: [{translateX: infoTranslateX}]
                                         }}
                                     />
                                     <Text style={{
@@ -214,24 +212,35 @@ export default function App() {
                                                 fontFamily: "ShinGoPro-Bold",
                                             }}
                                             onPress={() => {
-                                                resetDatas()
+                                                resetMap()
                                                 goBack()
                                             }}
                                         >
                                             <ArrowBigLeft color="yellow" size={26}/>
                                         </CustomButton>
                                         <CustomButton
-                                            style={[styles.CTAButton, {
-                                                flex: 1
-                                            }]}
+                                            style={[styles.CTAButton, { flex: 1 }]}
                                             textStyle={styles.CTAButtonText}
                                             onPress={() => {
-                                                resetDatas()
-                                                generateMap(map)
+                                                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+                                                opacity.value = withTiming(0, { duration: 200 });
+                                                infoTranslateX.value = withTiming(-100, { duration: 300 });
+
+                                                setTimeout(() => {
+                                                    resetMap();
+                                                    generateMap(map);
+
+                                                    infoTranslateX.value = 100;
+                                                    opacity.value = 0;
+
+                                                    infoTranslateX.value = withTiming(0, { duration: 300 });
+                                                    opacity.value = withTiming(1, { duration: 200 });
+                                                }, 300);
                                             }}
                                         >
                                             Relancer
                                         </CustomButton>
+
                                     </View>
                                 </View>
                             </View>
