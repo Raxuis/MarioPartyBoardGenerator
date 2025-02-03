@@ -1,4 +1,4 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import CustomButton from "./components/CustomButton";
 import {useStore} from "./store/store";
 import {useFonts} from "expo-font";
@@ -13,7 +13,7 @@ import Animated, {
     withSpring
 } from 'react-native-reanimated';
 import * as Haptics from "expo-haptics";
-import {data} from "./constants";
+import {ArrowBigLeft} from "lucide-react-native";
 
 
 export default function App() {
@@ -40,6 +40,38 @@ export default function App() {
     const height = useSharedValue(0);
     const iconWidth = useSharedValue(180);
     const iconHeight = useSharedValue(180);
+
+    const resetDatas = () => {
+        setMap({
+            id: 0,
+            name: "",
+            description: "",
+            boardView: "",
+            boardIcon: ""
+        })
+    }
+
+    const goBack = () => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+        opacity.value = withTiming(0, {
+            duration: 300,
+            easing: Easing.elastic(1),
+            reduceMotion: ReduceMotion.System,
+        });
+        width.value = withTiming(0, {
+            duration: 300,
+            easing: Easing.elastic(1),
+            reduceMotion: ReduceMotion.System,
+        });
+        height.value = withTiming(0, {
+            duration: 300,
+            easing: Easing.elastic(1),
+            reduceMotion: ReduceMotion.System,
+        });
+        iconHeight.value = 180;
+        iconWidth.value = 180;
+    }
+
 
     useEffect(() => {
         iconHeight.value = withRepeat(withTiming(200, {duration: 1000}), -1, true);
@@ -164,52 +196,50 @@ export default function App() {
                                     }}>
                                         {map.description}
                                     </Text>
-                                    <CustomButton
-                                        style={styles.CTAButton}
-                                        textStyle={styles.CTAButtonText}
-                                        onPress={() => {
-                                            setMap({
-                                                id: 0,
-                                                name: "",
-                                                description: "",
-                                                boardView: "",
-                                                boardIcon: ""
-                                            })
-                                            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-                                            opacity.value = withTiming(0, {
-                                                duration: 300,
-                                                easing: Easing.elastic(1),
-                                                reduceMotion: ReduceMotion.System,
-                                            });
-                                            width.value = withTiming(0, {
-                                                duration: 300,
-                                                easing: Easing.elastic(1),
-                                                reduceMotion: ReduceMotion.System,
-                                            });
-                                            height.value = withTiming(0, {
-                                                duration: 300,
-                                                easing: Easing.elastic(1),
-                                                reduceMotion: ReduceMotion.System,
-                                            });
-                                            iconHeight.value = 180;
-                                            iconWidth.value = 180;
-                                        }}
-                                    >
-                                        Réinitialiser
-                                    </CustomButton>
+                                    <View style={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        justifyContent: "space-between"
+                                    }}>
+                                        <CustomButton
+                                            style={[styles.CTAButton, {
+                                                padding: 2,
+                                                width: 50,
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center"
+                                            }]}
+                                            textStyle={{
+                                                fontSize: 12,
+                                                fontFamily: "ShinGoPro-Bold",
+                                            }}
+                                            onPress={() => {
+                                                resetDatas()
+                                                goBack()
+                                            }}
+                                        >
+                                            <ArrowBigLeft color="yellow" size={26}/>
+                                        </CustomButton>
+                                        <CustomButton
+                                            style={[styles.CTAButton, {
+                                                flex: 1
+                                            }]}
+                                            textStyle={styles.CTAButtonText}
+                                            onPress={() => {
+                                                resetDatas()
+                                                generateMap(map)
+                                            }}
+                                        >
+                                            Relancer
+                                        </CustomButton>
+                                    </View>
                                 </View>
                             </View>
                         </View>
                     ) : page === "maps" ? (
                         <View style={styles.container}>
                             <Text>Maps</Text>
-                            {
-                                data.map((item, index) => (
-                                    <View key={index}>
-                                        <Text>{item.name}</Text>
-                                    </View>
-                                ))
-                            }
+                            {/*<MapsCarousel data={data}/>*/}
                         </View>
                     ) : (
                         <View style={styles.container}>

@@ -10,9 +10,14 @@ export const useStore = create((set) => ({
         boardIcon: "",
     },
     setMap: (map) => set({map}),
-    generateMap: () => {
+    generateMap: (prevMap = null) => {
         if (data.length === 0) return;
         const randomItem = data[Math.floor(Math.random() * data.length)];
+
+        if (prevMap && randomItem.id === prevMap.id) {
+            return useStore.getState().generateMap(prevMap);
+        }
+        
         set({
             map: {
                 id: randomItem.id ?? Math.random(),
