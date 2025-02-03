@@ -14,6 +14,7 @@ import Animated, {
 import * as Haptics from "expo-haptics";
 import {ArrowBigLeft} from "lucide-react-native";
 import MapsDisplay from "./components/MapsDisplay";
+import {nintendoColor} from "./constants";
 
 
 export default function App() {
@@ -308,15 +309,46 @@ export default function App() {
                     ) : page === "maps" ? (
                         <SafeAreaView style={{position: "relative", width: "100%", height: "100%"}}>
                             <View style={{margin: 20}}>
-                                <Text style={{
-                                    fontFamily: "ShinGoPro-Bold",
-                                    fontSize: 24,
-                                    textAlign: "center",
-                                    color: "black",
-                                    margin: 20,
+                                <View style={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    gap: 2,
                                 }}>
-                                    Super Mario Party Jamboree Maps
-                                </Text>
+                                    <CustomButton
+                                        style={[{
+                                            backgroundColor: nintendoColor,
+                                            padding: 2,
+                                            width: 50,
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center"
+                                        }]}
+                                        textStyle={{
+                                            fontSize: 12,
+                                            fontFamily: "ShinGoPro-Bold",
+                                        }}
+                                        onPress={() => {
+                                            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                                            resetMap()
+                                            goBack()
+                                            setPage("home")
+                                        }}
+                                    >
+                                        <ArrowBigLeft color="white" size={26}/>
+                                    </CustomButton>
+                                    <Text style={{
+                                        fontFamily: "ShinGoPro-Bold",
+                                        fontSize: 24,
+                                        textAlign: "center",
+                                        color: nintendoColor,
+                                        margin: 20,
+                                    }}>
+
+                                        Super Mario Party Jamboree Maps
+                                    </Text>
+                                </View>
                                 <MapsDisplay/>
                             </View>
                         </SafeAreaView>

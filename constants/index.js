@@ -49,3 +49,14 @@ export const data = [
         boardIcon: require('../assets/board-icons/super-mario-party-jamboree-board-icon-6.png'),
     }
 ];
+
+
+
+export const gameColors = {
+    'Super Mario Party Jamboree': '#FF5733',
+    'Mario Party Superstars': '#3498db',
+    'Mario Party 10': '#2ecc71',
+    'Mario Party 9': '#f1c40f',
+};
+
+export const nintendoColor = '#E60012';
