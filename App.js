@@ -6,7 +6,7 @@ import {useEffect} from "react";
 import * as SplashScreen from "expo-splash-screen/build/index";
 
 export default function App() {
-    const {map, generateMap} = useStore();
+    const {map, generateMap, setMap} = useStore();
     const [loaded, error] = useFonts({
         'Super-Mario': require('./assets/fonts/SuperMario256.ttf'),
     });
@@ -55,32 +55,77 @@ export default function App() {
                         </CustomButton>
                     </View>
                 ) : (
-                    <View style={[styles.randomMapContainer, {
-                        maxWidth: 300,
-                    }]}>
-                        <Image
-                            source={map.boardIcon}
-                            style={{
-                                width: 200,
-                                height: 200,
-                                resizeMode: 'contain',
-                            }}
-                        />
-                        <Text style={{
-                            fontFamily: "Super-Mario",
-                            fontSize: 24,
-                            textAlign: "center",
+                    <View style={styles.container}>
+                        <Image source={map.boardView} style={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            width: "100%",
+                            height: "100%",
+                            resizeMode: "cover",
+                        }}/>
+                        <View style={{
+                            width: "100%",
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            backgroundColor: "rgba(0, 0, 0, 0.8)",
                         }}>
-                            {map.name}
-                        </Text>
-                        <Text style={{
-                            fontFamily: "Super-Mario",
-                            fontSize: 16,
-                            textAlign: "center",
-                            paddingTop: 10,
-                        }}>
-                            {map.description}
-                        </Text>
+                            <View style={[styles.randomMapContainer, {
+                                padding: 20,
+                            }]}>
+                                <Image
+                                    source={map.boardIcon}
+                                    style={{
+                                        width: 200,
+                                        height: 200,
+                                        resizeMode: 'contain',
+                                    }}
+                                />
+                                <Text style={{
+                                    fontFamily: "Super-Mario",
+                                    fontSize: 24,
+                                    textAlign: "center",
+                                    color: "white"
+                                }}>
+                                    {map.name}
+                                </Text>
+                                <Text style={{
+                                    fontFamily: "Super-Mario",
+                                    fontSize: 12,
+                                    textAlign: "center",
+                                    paddingTop: 10,
+                                    opacity: 0.7,
+                                    color: "white"
+                                }}>
+                                    {map.description}
+                                </Text>
+                                <CustomButton
+                                    style={{
+                                        backgroundColor: "red",
+                                        width: 300
+                                    }}
+                                    textStyle={{
+                                        color: "yellow",
+                                        fontSize: 16,
+                                        fontWeight: "bold",
+                                        fontFamily: "Super-Mario",
+                                    }}
+                                    onPress={() => setMap({
+                                        id: 0,
+                                        name: "",
+                                        description: "",
+                                        boardView: "",
+                                        boardIcon: ""
+                                    })}
+                                >
+                                    Réinitialiser
+                                </CustomButton>
+                            </View>
+                        </View>
                     </View>
                 )
             }
@@ -95,6 +140,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+        position: "relative",
+        width: "100%",
+        height: "100%",
     },
     randomMapContainer: {
         display: "flex",
