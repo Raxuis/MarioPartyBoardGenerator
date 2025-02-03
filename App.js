@@ -62,31 +62,9 @@ export default function App() {
             easing: Easing.elastic(1),
             reduceMotion: ReduceMotion.System,
         });
-        starScale.value = 0;
         starTranslateX.value = 0;
         starTranslateY.value = 0;
-    }
-
-
-    const goBack = () => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-        opacity.value = withTiming(0, {
-            duration: 300,
-            easing: Easing.elastic(1),
-            reduceMotion: ReduceMotion.System,
-        });
-        homeIconWidth.value = withTiming(0, {
-            duration: 300,
-            easing: Easing.elastic(1),
-            reduceMotion: ReduceMotion.System,
-        });
-        homeIconHeight.value = withTiming(0, {
-            duration: 300,
-            easing: Easing.elastic(1),
-            reduceMotion: ReduceMotion.System,
-        });
-        iconHeight.value = 180;
-        iconWidth.value = 180;
+        starScale.value = 1;
     }
 
     useEffect(() => {
@@ -264,8 +242,9 @@ export default function App() {
                                                 fontFamily: "ShinGoPro-Bold",
                                             }}
                                             onPress={() => {
+                                                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
                                                 resetMap()
-                                                goBack()
+                                                resetHomeAnimations()
                                             }}
                                         >
                                             <ArrowBigLeft color="yellow" size={26}/>
