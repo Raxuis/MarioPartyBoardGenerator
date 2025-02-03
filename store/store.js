@@ -23,4 +23,6 @@ export const useStore = create((set) => ({
             }
         });
     },
+    page: "home",
+    setPage: (page) => set({page}),
 }));
