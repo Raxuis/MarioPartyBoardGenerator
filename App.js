@@ -4,7 +4,14 @@ import {useStore} from "./store/store";
 import {useFonts} from "expo-font";
 import {useEffect} from "react";
 import * as SplashScreen from "expo-splash-screen/build/index";
-import Animated, {withTiming, Easing, useSharedValue} from 'react-native-reanimated';
+import Animated, {
+    withTiming,
+    Easing,
+    useSharedValue,
+    ReduceMotion,
+    withRepeat,
+    withSpring
+} from 'react-native-reanimated';
 
 
 export default function App() {
@@ -23,10 +30,13 @@ export default function App() {
     const opacity = useSharedValue(0);
     const width = useSharedValue(0);
     const height = useSharedValue(0);
+    const iconWidth = useSharedValue(175);
+    const iconHeight = useSharedValue(175);
 
     useEffect(() => {
-        console.log(map);
-    }, [map]);
+        iconHeight.value = withRepeat(withTiming(200, {duration: 1000}), -1, true);
+        iconWidth.value = withRepeat(withTiming(200, {duration: 1000}), -1, true);
+    })
 
     useEffect(() => {
         if (loaded || error) {
@@ -43,11 +53,11 @@ export default function App() {
             {
                 map.name === "" ? (
                     <View style={styles.randomMapContainer}>
-                        <Image
+                        <Animated.Image
                             source={require('./assets/icon.png')}
                             style={{
-                                width: 200,
-                                height: 200,
+                                width: iconWidth,
+                                height: iconHeight,
                                 resizeMode: 'contain',
                             }}
                         />
@@ -59,14 +69,17 @@ export default function App() {
                                 opacity.value = withTiming(1, {
                                     duration: 300,
                                     easing: Easing.elastic(1),
+                                    reduceMotion: ReduceMotion.System,
                                 });
                                 width.value = withTiming(200, {
                                     duration: 300,
                                     easing: Easing.elastic(1),
+                                    reduceMotion: ReduceMotion.System,
                                 });
                                 height.value = withTiming(200, {
                                     duration: 300,
                                     easing: Easing.elastic(1),
+                                    reduceMotion: ReduceMotion.System,
                                 });
                             }}
                         >
@@ -139,15 +152,20 @@ export default function App() {
                                         opacity.value = withTiming(0, {
                                             duration: 300,
                                             easing: Easing.elastic(1),
+                                            reduceMotion: ReduceMotion.System,
                                         });
                                         width.value = withTiming(0, {
                                             duration: 300,
                                             easing: Easing.elastic(1),
+                                            reduceMotion: ReduceMotion.System,
                                         });
                                         height.value = withTiming(0, {
                                             duration: 300,
                                             easing: Easing.elastic(1),
+                                            reduceMotion: ReduceMotion.System,
                                         });
+                                        iconHeight.value = 175;
+                                        iconWidth.value = 175;
                                     }}
                                 >
                                     Réinitialiser
