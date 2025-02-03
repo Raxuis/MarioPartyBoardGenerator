@@ -52,5 +52,5 @@ export const useStore = create((set) => ({
             boardView: "",
             boardIcon: ""
         })
-    }
+    },
 }));

@@ -1,4 +1,4 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, Image, Platform, SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import CustomButton from "./components/CustomButton";
 import {useStore} from "./store/store";
 import {useFonts} from "expo-font";
@@ -35,11 +35,37 @@ export default function App() {
     });
 
     const opacity = useSharedValue(0);
-    const width = useSharedValue(0);
-    const height = useSharedValue(0);
+    const homeIconWidth = useSharedValue(0);
+    const homeIconHeight = useSharedValue(0);
     const iconWidth = useSharedValue(180);
     const iconHeight = useSharedValue(180);
     const infoTranslateX = useSharedValue(0);
+    const starTranslateX = useSharedValue(0);
+    const starTranslateY = useSharedValue(0);
+    const starScale = useSharedValue(1);
+
+    const windowWidth = Dimensions.get('window').width;
+
+    const resetHomeAnimations = () => {
+        opacity.value = withTiming(1, {
+            duration: 300,
+            easing: Easing.elastic(1),
+            reduceMotion: ReduceMotion.System,
+        });
+        homeIconWidth.value = withTiming(200, {
+            duration: 300,
+            easing: Easing.elastic(1),
+            reduceMotion: ReduceMotion.System,
+        });
+        homeIconHeight.value = withTiming(200, {
+            duration: 300,
+            easing: Easing.elastic(1),
+            reduceMotion: ReduceMotion.System,
+        });
+        starScale.value = 0;
+        starTranslateX.value = 0;
+        starTranslateY.value = 0;
+    }
 
 
     const goBack = () => {
@@ -49,12 +75,12 @@ export default function App() {
             easing: Easing.elastic(1),
             reduceMotion: ReduceMotion.System,
         });
-        width.value = withTiming(0, {
+        homeIconWidth.value = withTiming(0, {
             duration: 300,
             easing: Easing.elastic(1),
             reduceMotion: ReduceMotion.System,
         });
-        height.value = withTiming(0, {
+        homeIconHeight.value = withTiming(0, {
             duration: 300,
             easing: Easing.elastic(1),
             reduceMotion: ReduceMotion.System,
@@ -71,19 +97,44 @@ export default function App() {
 
 
     useEffect(() => {
-        iconHeight.value = withRepeat(withTiming(200, {duration: 1000}), -1, true);
-        iconWidth.value = withRepeat(withTiming(200, {duration: 1000}), -1, true);
-    })
+        if (page === "home") {
+            iconHeight.value = withRepeat(withTiming(200, {duration: 1000}), -1, true);
+            iconWidth.value = withRepeat(withTiming(200, {duration: 1000}), -1, true);
+
+            starTranslateX.value = withRepeat(
+                withTiming(windowWidth - 70, {
+                    duration: 3000,
+                    easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+                }),
+                -1,
+                true
+            );
+
+            starTranslateY.value = withRepeat(
+                withTiming(100, {
+                    duration: 2000,
+                    easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+                }),
+                -1,
+                true
+            );
+
+            starScale.value = withRepeat(
+                withTiming(1.2, {
+                    duration: 1000,
+                    easing: Easing.bezier(0.4, 0, 0.2, 1),
+                }),
+                -1,
+                true
+            );
+        }
+    });
 
     useEffect(() => {
         if (loaded || error) {
             SplashScreen.hideAsync();
         }
     }, [loaded, error]);
-
-    useEffect(() => {
-        console.log(page)
-    }, [page]);
 
     if (!loaded && !error) {
         return null;
@@ -94,53 +145,54 @@ export default function App() {
             {
                 page === "home" ?
                     map.name === "" ? (
-                        <View style={[styles.randomMapContainer]}>
-                            <View style={styles.imageContainer}>
-                                <Animated.Image
-                                    source={require('./assets/icon.png')}
-                                    style={{
-                                        width: iconWidth,
-                                        height: iconHeight,
-                                        resizeMode: 'contain',
+                        <SafeAreaView style={{position: "relative", width: "100%", height: "100%"}}>
+                            <Animated.Image
+                                source={require('./assets/star.png')}
+                                style={[styles.star, {
+                                    top: Platform.OS === 'ios' ? 50 : StatusBar.currentHeight + 10,
+                                    left: 10,
+                                    marginTop: 10,
+                                    transform: [
+                                        {translateX: starTranslateX},
+                                        {translateY: starTranslateY},
+                                        {scale: starScale}
+                                    ],
+                                }]}
+                            />
+                            <View style={[styles.randomMapContainer, styles.fullSize]}>
+                                <View style={styles.imageContainer}>
+                                    <Animated.Image
+                                        source={require('./assets/icon.png')}
+                                        style={{
+                                            width: iconWidth,
+                                            height: iconHeight,
+                                            resizeMode: 'contain',
+                                        }}
+                                    />
+                                </View>
+                                <CustomButton
+                                    style={styles.CTAButton}
+                                    textStyle={styles.CTAButtonText}
+                                    onPress={() => {
+                                        generateMap();
+                                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+                                        resetHomeAnimations();
                                     }}
-                                />
+                                >
+                                    Choisir une carte
+                                </CustomButton>
+                                <CustomButton
+                                    style={[styles.CTAButton, {marginTop: 0}]}
+                                    textStyle={styles.CTAButtonText}
+                                    onPress={() => {
+                                        setPage("maps");
+                                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+                                    }}
+                                >
+                                    Voir toutes les cartes
+                                </CustomButton>
                             </View>
-                            <CustomButton
-                                style={styles.CTAButton}
-                                textStyle={styles.CTAButtonText}
-                                onPress={() => {
-                                    generateMap();
-                                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-                                    opacity.value = withTiming(1, {
-                                        duration: 300,
-                                        easing: Easing.elastic(1),
-                                        reduceMotion: ReduceMotion.System,
-                                    });
-                                    width.value = withTiming(200, {
-                                        duration: 300,
-                                        easing: Easing.elastic(1),
-                                        reduceMotion: ReduceMotion.System,
-                                    });
-                                    height.value = withTiming(200, {
-                                        duration: 300,
-                                        easing: Easing.elastic(1),
-                                        reduceMotion: ReduceMotion.System,
-                                    });
-                                }}
-                            >
-                                Choisir une carte
-                            </CustomButton>
-                            <CustomButton
-                                style={[styles.CTAButton, {marginTop: 0}]}
-                                textStyle={styles.CTAButtonText}
-                                onPress={() => {
-                                    setPage("maps");
-                                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-                                }}
-                            >
-                                Voir toutes les cartes
-                            </CustomButton>
-                        </View>
+                        </SafeAreaView>
                     ) : (
                         <View style={styles.container}>
                             <Image
@@ -168,8 +220,8 @@ export default function App() {
                                     <Animated.Image
                                         source={map.boardIcon}
                                         style={{
-                                            width: width,
-                                            height: height,
+                                            width: homeIconWidth,
+                                            height: homeIconHeight,
                                             opacity: opacity,
                                             resizeMode: 'contain',
                                             transform: [{translateX: infoTranslateX}]
@@ -219,12 +271,12 @@ export default function App() {
                                             <ArrowBigLeft color="yellow" size={26}/>
                                         </CustomButton>
                                         <CustomButton
-                                            style={[styles.CTAButton, { flex: 1 }]}
+                                            style={[styles.CTAButton, {flex: 1}]}
                                             textStyle={styles.CTAButtonText}
                                             onPress={() => {
                                                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-                                                opacity.value = withTiming(0, { duration: 200 });
-                                                infoTranslateX.value = withTiming(-100, { duration: 300 });
+                                                opacity.value = withTiming(0, {duration: 200});
+                                                infoTranslateX.value = withTiming(-100, {duration: 300});
 
                                                 setTimeout(() => {
                                                     resetMap();
@@ -233,8 +285,8 @@ export default function App() {
                                                     infoTranslateX.value = 100;
                                                     opacity.value = 0;
 
-                                                    infoTranslateX.value = withTiming(0, { duration: 300 });
-                                                    opacity.value = withTiming(1, { duration: 200 });
+                                                    infoTranslateX.value = withTiming(0, {duration: 300});
+                                                    opacity.value = withTiming(1, {duration: 200});
                                                 }, 300);
                                             }}
                                         >
@@ -298,5 +350,10 @@ const styles = StyleSheet.create({
         display: "flex",
         alignItems: "center",
         justifyContent: "center"
-    }
+    },
+    star: {
+        position: 'absolute',
+        width: 60,
+        height: 60,
+    },
 });
