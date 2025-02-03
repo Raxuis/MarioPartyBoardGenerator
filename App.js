@@ -1,4 +1,4 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import CustomButton from "./components/CustomButton";
 import {useStore} from "./store/store";
 import {useFonts} from "expo-font";
@@ -12,6 +12,10 @@ export default function App() {
     });
 
     useEffect(() => {
+        console.log(map);
+    }, [map]);
+
+    useEffect(() => {
         if (loaded || error) {
             SplashScreen.hideAsync();
         }
@@ -23,41 +27,66 @@ export default function App() {
 
     return (
         <View style={styles.container}>
-            <Image
-                source={require('./assets/icon.png')}
-                style={{
-                    width: 200,
-                    height: 200,
-                    resizeMode: 'contain',
-                }}
-            />
-            <TouchableOpacity>
-                <CustomButton
-                    style={{
-                        backgroundColor: "red",
-                        width: 200,
-                        elevation: 3
-                    }}
-                    textStyle={{
-                        color: "yellow",
-                        fontSize: 16,
-                        fontWeight: "bold",
-                        fontFamily: "Super-Mario"
-                    }}
-                    onPress={generateMap}
-                >
-                    Choisir une carte
-                </CustomButton>
-            </TouchableOpacity>
             {
-                map && (
-                    <Text>
-                        {map.name}
-                    </Text>
+                map.name === "" ? (
+                    <View style={styles.randomMapContainer}>
+                        <Image
+                            source={require('./assets/icon.png')}
+                            style={{
+                                width: 200,
+                                height: 200,
+                                resizeMode: 'contain',
+                            }}
+                        />
+                        <CustomButton
+                            style={{
+                                backgroundColor: "red",
+                                width: 300
+                            }}
+                            textStyle={{
+                                color: "yellow",
+                                fontSize: 16,
+                                fontWeight: "bold",
+                                fontFamily: "Super-Mario"
+                            }}
+                            onPress={generateMap}
+                        >
+                            Choisir une carte
+                        </CustomButton>
+                    </View>
+                ) : (
+                    <View style={[styles.randomMapContainer, {
+                        maxWidth: 300,
+                    }]}>
+                        <Image
+                            source={map.boardIcon}
+                            style={{
+                                width: 200,
+                                height: 200,
+                                resizeMode: 'contain',
+                            }}
+                        />
+                        <Text style={{
+                            fontFamily: "Super-Mario",
+                            fontSize: 24,
+                            textAlign: "center",
+                        }}>
+                            {map.name}
+                        </Text>
+                        <Text style={{
+                            fontFamily: "Super-Mario",
+                            fontSize: 16,
+                            textAlign: "center",
+                            paddingTop: 10,
+                        }}>
+                            {map.description}
+                        </Text>
+                    </View>
                 )
             }
         </View>
-    );
+    )
+        ;
 }
 
 const styles = StyleSheet.create({
@@ -67,4 +96,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    randomMapContainer: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+    }
 });
