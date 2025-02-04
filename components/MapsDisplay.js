@@ -8,7 +8,7 @@ import Animated, {
 import {data} from '../constants';
 import {getRandomGameColor} from "../utils";
 
-const AnimatedCard = ({item, color, index}) => {
+const AnimatedCard = ({item, color}) => {
     const opacity = useSharedValue(0);
     const translateY = useSharedValue(50);
 
@@ -97,7 +97,6 @@ const MapsDisplay = () => {
                     key={index}
                     item={item}
                     color={colors[index]}
-                    index={index}
                 />
             ))}
         </ScrollView>

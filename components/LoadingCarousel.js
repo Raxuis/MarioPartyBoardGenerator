@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Image, Dimensions, Animated } from 'react-native';
-import { data } from '../constants';
+import React, {useState, useEffect, useRef} from 'react';
+import {View, Text, Image, Dimensions, Animated, StyleSheet} from 'react-native';
+import {data} from '../constants';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 const LoadingCarousel = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -25,7 +25,7 @@ const LoadingCarousel = () => {
         return () => clearInterval(interval);
     }, [currentIndex]);
 
-    const renderItem = ({ item }) => (
+    const renderItem = ({item}) => (
         <View style={styles.carouselItem}>
             <Image
                 source={item.boardIcon}
@@ -58,7 +58,7 @@ const LoadingCarousel = () => {
     );
 };
 
-const styles = {
+const styles = StyleSheet.create({
     carouselContainer: {
         flex: 1,
         justifyContent: 'center',
@@ -82,6 +82,6 @@ const styles = {
         color: 'white',
         textAlign: 'center',
     }
-};
+});
 
 export default LoadingCarousel;
