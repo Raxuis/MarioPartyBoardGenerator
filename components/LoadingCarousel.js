@@ -1,17 +1,38 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Image, Dimensions, Animated, StyleSheet } from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {View, Text, Image, Dimensions, Animated, StyleSheet} from 'react-native';
 import * as Haptics from 'expo-haptics';
-import { data } from '../constants';
+import {useStore} from '../store/store';
+import {data} from '../constants';
+import {shuffleArray} from "../utils";
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 const LoadingCarousel = () => {
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const [shuffledData, setShuffledData] = useState([]);
     const flatListRef = useRef(null);
+    const currentIndexRef = useRef(0);
+    const {map} = useStore();
+
+    const TOTAL_DURATION = 5000;
 
     useEffect(() => {
+        if (map.id !== 0) {
+            const dataWithoutMap = data.filter(item => item.id !== map.id);
+            let shuffledWithoutMap = shuffleArray(dataWithoutMap);
+            const finalData = [...shuffledWithoutMap, map];
+            setShuffledData(finalData);
+        }
+    }, [map]);
+
+    useEffect(() => {
+        if (shuffledData.length === 0) return;
+
+        const intervalDuration = Math.floor(TOTAL_DURATION / shuffledData.length);
+
         const interval = setInterval(() => {
-            const nextIndex = currentIndex === data.length - 1 ? 0 : currentIndex + 1;
+            const nextIndex = currentIndexRef.current === shuffledData.length - 1
+                ? 0
+                : currentIndexRef.current + 1;
 
             if (flatListRef.current) {
                 flatListRef.current.scrollToIndex({
@@ -20,20 +41,19 @@ const LoadingCarousel = () => {
                 });
             }
 
-            setCurrentIndex(nextIndex);
-
-            if (nextIndex === data.length - 1) {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy); // Haptics lourd sur le dernier élément
+            if (nextIndex === shuffledData.length - 1) {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
             } else {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); // Haptics léger sur les autres éléments
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }
 
-        }, 1000);
+            currentIndexRef.current = nextIndex;
+        }, intervalDuration);
 
         return () => clearInterval(interval);
-    }, [currentIndex]);
+    }, [shuffledData]);
 
-    const renderItem = ({ item }) => (
+    const renderItem = ({item}) => (
         <View style={styles.carouselItem}>
             <Image
                 source={item.boardIcon}
@@ -48,12 +68,12 @@ const LoadingCarousel = () => {
         <View style={styles.carouselContainer}>
             <Animated.FlatList
                 ref={flatListRef}
-                data={data}
+                data={shuffledData}
                 horizontal
                 pagingEnabled
                 scrollEnabled={false}
                 showsHorizontalScrollIndicator={false}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item, index) => `carousel-${item.id}-${index}`}
                 renderItem={renderItem}
                 getItemLayout={(data, index) => ({
                     length: width,

@@ -62,19 +62,18 @@ export default function App() {
         await toggleRandomLoading();
     };
 
-    const toggleRandomLoading = () => {
-        return new Promise((resolve) => {
-            setRandomLoading(true);
-            toggleMusic(true);
+    const toggleRandomLoading = async () => {
+        setRandomLoading(true);
+        toggleMusic(true);
 
-            setTimeout(async () => {
-                generateMap(map);
-                setRandomLoading(false);
-                await toggleMusic(false);
-                resolve();
-            }, 5000);
-        });
+        await generateMap(map);
+
+        setTimeout(() => {
+            setRandomLoading(false);
+            toggleMusic(false);
+        }, 5000);
     };
+
 
     useEffect(() => {
         if (loaded || error) {
@@ -90,7 +89,7 @@ export default function App() {
         <View style={globalStyles.container}>
             {
                 page === "home" ?
-                    map.name === "" && !randomLoading ? (
+                    map.id === 0 && !randomLoading ? (
                         <Home generateRandomMap={generateRandomMap}/>
                     ) : randomLoading ? (
                         <RandomMapGeneration/>

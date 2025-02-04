@@ -14,3 +14,7 @@ export const fadeOutSound = async (sound, duration = 1000) => {
     await sound.stopAsync();
     await sound.setVolumeAsync(1);
 };
+
+export const shuffleArray = (array) => {
+    return [...array].sort(() => Math.random() - 0.5);
+};
