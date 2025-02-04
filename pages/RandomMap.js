@@ -3,7 +3,6 @@ import {Image, Text, View} from "react-native";
 import Animated, {useSharedValue, withTiming} from "react-native-reanimated";
 import CustomButton from "../components/CustomButton";
 import * as Haptics from "expo-haptics";
-import {ArrowBigLeft} from "lucide-react-native";
 import {useStore} from "../store/store";
 import {globalStyles} from "../styles/globalStyles";
 

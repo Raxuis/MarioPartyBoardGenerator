@@ -1,8 +1,9 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {View, Text, Image, Dimensions, Animated, StyleSheet} from 'react-native';
-import {data} from '../constants';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, Image, Dimensions, Animated, StyleSheet } from 'react-native';
+import * as Haptics from 'expo-haptics';
+import { data } from '../constants';
 
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const LoadingCarousel = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -20,12 +21,19 @@ const LoadingCarousel = () => {
             }
 
             setCurrentIndex(nextIndex);
+
+            if (nextIndex === data.length - 1) {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy); // Haptics lourd sur le dernier élément
+            } else {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); // Haptics léger sur les autres éléments
+            }
+
         }, 1000);
 
         return () => clearInterval(interval);
     }, [currentIndex]);
 
-    const renderItem = ({item}) => (
+    const renderItem = ({ item }) => (
         <View style={styles.carouselItem}>
             <Image
                 source={item.boardIcon}
