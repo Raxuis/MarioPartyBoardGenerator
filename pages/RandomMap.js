@@ -133,7 +133,6 @@ const RandomMap = () => {
                         >
                             Relancer
                         </CustomButton>
-
                     </View>
                 </View>
             </View>

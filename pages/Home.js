@@ -19,35 +19,43 @@ export default function Home({generateRandomMap}) {
     const starScale = useSharedValue(1);
 
     useEffect(() => {
-            homeIconHeight.value = withRepeat(withTiming(200, {duration: 1000}), -1, true);
-            homeIconWidth.value = withRepeat(withTiming(200, {duration: 1000}), -1, true);
+        homeIconHeight.value = withRepeat(withTiming(200, {duration: 1000}), -1, true);
+        homeIconWidth.value = withRepeat(withTiming(200, {duration: 1000}), -1, true);
 
-            starTranslateX.value = withRepeat(
-                withTiming(windowWidth - 70, {
-                    duration: 3000,
-                    easing: Easing.bezier(0.25, 0.1, 0.25, 1),
-                }),
-                -1,
-                true
-            );
+        starTranslateX.value = withRepeat(
+            withTiming(windowWidth - 70, {
+                duration: 3000,
+                easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+            }),
+            -1,
+            true
+        );
 
-            starTranslateY.value = withRepeat(
-                withTiming(100, {
-                    duration: 2000,
-                    easing: Easing.bezier(0.25, 0.1, 0.25, 1),
-                }),
-                -1,
-                true
-            );
+        starTranslateY.value = withRepeat(
+            withTiming(100, {
+                duration: 2000,
+                easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+            }),
+            -1,
+            true
+        );
 
-            starScale.value = withRepeat(
-                withTiming(1.2, {
-                    duration: 1000,
-                    easing: Easing.bezier(0.4, 0, 0.2, 1),
-                }),
-                -1,
-                true
-            );
+        starScale.value = withRepeat(
+            withTiming(1.2, {
+                duration: 1000,
+                easing: Easing.bezier(0.4, 0, 0.2, 1),
+            }),
+            -1,
+            true
+        );
+
+        return () => {
+            homeIconWidth.value = 180;
+            homeIconHeight.value = 180;
+            starTranslateX.value = 0;
+            starTranslateY.value = 0;
+            starScale.value = 1;
+        }
     });
 
     return (

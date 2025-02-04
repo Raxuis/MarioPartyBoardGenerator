@@ -16,6 +16,10 @@ const RandomMapGeneration = () => {
             -1,
             true
         );
+
+        return () => {
+            shuffleTranslateY.value = 0;
+        }
     })
 
     return (

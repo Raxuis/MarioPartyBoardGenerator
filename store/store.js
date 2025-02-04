@@ -17,7 +17,7 @@ export const useStore = create((set) => ({
             const onlyItem = data[0];
             set({
                 map: {
-                    id: onlyItem.id ?? Math.random(),
+                    id: onlyItem.id,
                     name: onlyItem.name,
                     description: onlyItem.description,
                     boardView: onlyItem.boardView,
@@ -34,7 +34,7 @@ export const useStore = create((set) => ({
 
         set({
             map: {
-                id: randomItem.id ?? Math.random(),
+                id: randomItem.id,
                 name: randomItem.name,
                 description: randomItem.description,
                 boardView: randomItem.boardView,
@@ -50,7 +50,7 @@ export const useStore = create((set) => ({
             name: "",
             description: "",
             boardView: "",
-            boardIcon: ""
+            boardIcon: "",
         })
     },
 }));
