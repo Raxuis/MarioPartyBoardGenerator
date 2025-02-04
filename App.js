@@ -2,30 +2,33 @@ import {Dimensions, Image, Platform, SafeAreaView, StatusBar, StyleSheet, Text, 
 import CustomButton from "./components/CustomButton";
 import {useStore} from "./store/store";
 import {useFonts} from "expo-font";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import * as SplashScreen from "expo-splash-screen/build/index";
 import Animated, {
     withTiming,
     Easing,
     useSharedValue,
     ReduceMotion,
-    withRepeat,
+    withRepeat, useAnimatedStyle,
 } from 'react-native-reanimated';
 import * as Haptics from "expo-haptics";
 import {ArrowBigLeft} from "lucide-react-native";
 import MapsDisplay from "./components/MapsDisplay";
 import {nintendoColor} from "./constants";
+import {Audio} from "expo-av";
+import LoadingCarousel from "./components/LoadingCarousel";
 
 
 export default function App() {
 
-    const {
-        map,
-        generateMap,
-        resetMap,
-        page,
-        setPage
-    } = useStore();
+    const {map, generateMap, resetMap, page, setPage} = useStore();
+    const [sound, setSound] = useState(null);
+    const [_, setIsPlaying] = useState(false);
+    const [randomLoading, setRandomLoading] = useState(false);
+    const shuffleTranslateY = useSharedValue(0);
+    const shuffleAnimatedStyle = useAnimatedStyle(() => ({
+        transform: [{translateY: shuffleTranslateY.value}],
+    }));
 
     const [loaded, error] = useFonts({
         'Super-Mario': require('./assets/fonts/SuperMario256.ttf'),
@@ -49,6 +52,56 @@ export default function App() {
     const starScale = useSharedValue(1);
 
     const windowWidth = Dimensions.get('window').width;
+
+    useEffect(() => {
+        async function loadSound() {
+            const {sound} = await Audio.Sound.createAsync(
+                require('./assets/sounds/random.mp3'),
+                {shouldPlay: false, isLooping: true}
+            );
+            setSound(sound);
+        }
+
+        loadSound();
+        return () => sound && sound.unloadAsync();
+    }, []);
+
+    const toggleMusic = async (play) => {
+        if (sound) {
+            if (play) {
+                await sound.playAsync();
+                setIsPlaying(true);
+            } else {
+                await sound.stopAsync();
+                setIsPlaying(false);
+            }
+        }
+    };
+
+    const startShuffleAnimation = () => {
+        shuffleTranslateY.value = withRepeat(
+            withTiming(20, {duration: 300, easing: Easing.linear}),
+            -1,
+            true
+        );
+    };
+
+    const stopShuffleAnimation = () => {
+        shuffleTranslateY.value = withTiming(0, {duration: 300});
+    };
+
+    const toggleRandomLoading = () => {
+        setRandomLoading(true);
+        toggleMusic(true);
+        startShuffleAnimation();
+
+        setTimeout(() => {
+            generateMap(map);
+            setRandomLoading(false);
+            toggleMusic(false);
+            stopShuffleAnimation();
+        }, 5000);
+    };
 
     const resetHomeAnimations = () => {
         opacity.value = withTiming(1, {
@@ -150,7 +203,7 @@ export default function App() {
         <View style={styles.container}>
             {
                 page === "home" ?
-                    map.name === "" ? (
+                    map.name === "" && !randomLoading ? (
                         <SafeAreaView style={{position: "relative", width: "100%", height: "100%"}}>
                             <Animated.Image
                                 source={require('./assets/star.png')}
@@ -182,7 +235,8 @@ export default function App() {
                                     style={styles.CTAButton}
                                     textStyle={styles.CTAButtonText}
                                     onPress={() => {
-                                        generateMap();
+                                        toggleRandomLoading();
+
                                         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
                                         resetHomeAnimations();
                                     }}
@@ -201,112 +255,117 @@ export default function App() {
                                 </CustomButton>
                             </View>
                         </SafeAreaView>
-                    ) : (
-                        <View style={styles.container}>
-                            <Image
-                                source={map.boardView}
-                                style={[styles.fullSize, {
-                                    position: "absolute",
-                                    top: 0,
-                                    left: 0,
-                                    right: 0,
-                                    bottom: 0,
-                                    resizeMode: "cover",
-                                }]}
-                            />
-                            <View
-                                style={[styles.fullSize, {
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    backgroundColor: "rgba(0, 0, 0, 0.8)",
-                                }]}>
+                    ) : randomLoading ? (
+                            <Animated.View style={[styles.loadingContainer, shuffleAnimatedStyle]}>
+                                <LoadingCarousel/>
+                            </Animated.View>
+                        ) :
+                        (
+                            <View style={styles.container}>
+                                <Image
+                                    source={map.boardView}
+                                    style={[styles.fullSize, {
+                                        position: "absolute",
+                                        top: 0,
+                                        left: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                        resizeMode: "cover",
+                                    }]}
+                                />
                                 <View
-                                    style={[styles.randomMapContainer, {
-                                        padding: 20,
-                                    }]}>
-                                    <Animated.Image
-                                        source={map.boardIcon}
-                                        style={{
-                                            width: homeIconWidth,
-                                            height: homeIconHeight,
-                                            opacity: opacity,
-                                            resizeMode: 'contain',
-                                            transform: [{translateX: infoTranslateX}]
-                                        }}
-                                    />
-                                    <Text style={{
-                                        fontFamily: "ShinGoPro-Bold",
-                                        fontSize: 24,
-                                        textAlign: "center",
-                                        color: "white",
-                                        marginTop: 20,
-                                    }}>
-                                        {map.name}
-                                    </Text>
-                                    <Text style={{
-                                        fontFamily: "ShinGoPro",
-                                        fontSize: 12,
-                                        textAlign: "center",
-                                        paddingTop: 10,
-                                        opacity: 0.7,
-                                        color: "white"
-                                    }}>
-                                        {map.description}
-                                    </Text>
-                                    <View style={{
+                                    style={[styles.fullSize, {
                                         display: "flex",
-                                        flexDirection: "row",
-                                        justifyContent: "space-between"
-                                    }}>
-                                        <CustomButton
-                                            style={[styles.CTAButton, {
-                                                padding: 2,
-                                                width: 50,
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "center"
-                                            }]}
-                                            textStyle={{
-                                                fontSize: 12,
-                                                fontFamily: "ShinGoPro-Bold",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        backgroundColor: "rgba(0, 0, 0, 0.8)",
+                                    }]}>
+                                    <View
+                                        style={[styles.randomMapContainer, {
+                                            padding: 20,
+                                        }]}>
+                                        <Animated.Image
+                                            source={map.boardIcon}
+                                            style={{
+                                                width: homeIconWidth,
+                                                height: homeIconHeight,
+                                                opacity: opacity,
+                                                resizeMode: 'contain',
+                                                transform: [{translateX: infoTranslateX}]
                                             }}
-                                            onPress={() => {
-                                                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                                                resetMap()
-                                                goBack()
-                                            }}
-                                        >
-                                            <ArrowBigLeft color="yellow" size={26}/>
-                                        </CustomButton>
-                                        <CustomButton
-                                            style={[styles.CTAButton, {flex: 1}]}
-                                            textStyle={styles.CTAButtonText}
-                                            onPress={() => {
-                                                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-                                                opacity.value = withTiming(0, {duration: 200});
-                                                infoTranslateX.value = withTiming(-100, {duration: 300});
+                                        />
+                                        <Text style={{
+                                            fontFamily: "ShinGoPro-Bold",
+                                            fontSize: 24,
+                                            textAlign: "center",
+                                            color: "white",
+                                            marginTop: 20,
+                                        }}>
+                                            {map.name}
+                                        </Text>
+                                        <Text style={{
+                                            fontFamily: "ShinGoPro",
+                                            fontSize: 12,
+                                            textAlign: "center",
+                                            paddingTop: 10,
+                                            opacity: 0.7,
+                                            color: "white"
+                                        }}>
+                                            {map.description}
+                                        </Text>
+                                        <View style={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            justifyContent: "space-between"
+                                        }}>
+                                            <CustomButton
+                                                style={[styles.CTAButton, {
+                                                    padding: 2,
+                                                    width: 50,
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    justifyContent: "center"
+                                                }]}
+                                                textStyle={{
+                                                    fontSize: 12,
+                                                    fontFamily: "ShinGoPro-Bold",
+                                                }}
+                                                onPress={() => {
+                                                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                                                    resetMap()
+                                                    goBack()
+                                                }}
+                                            >
+                                                <ArrowBigLeft color="yellow" size={26}/>
+                                            </CustomButton>
+                                            <CustomButton
+                                                style={[styles.CTAButton, {flex: 1}]}
+                                                textStyle={styles.CTAButtonText}
+                                                onPress={() => {
+                                                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+                                                    opacity.value = withTiming(0, {duration: 200});
+                                                    infoTranslateX.value = withTiming(-100, {duration: 300});
 
-                                                setTimeout(() => {
-                                                    resetMap();
-                                                    generateMap(map);
+                                                    setTimeout(() => {
+                                                        resetMap();
+                                                        generateMap(map);
 
-                                                    infoTranslateX.value = 100;
-                                                    opacity.value = 0;
+                                                        infoTranslateX.value = 100;
+                                                        opacity.value = 0;
 
-                                                    infoTranslateX.value = withTiming(0, {duration: 300});
-                                                    opacity.value = withTiming(1, {duration: 200});
-                                                }, 300);
-                                            }}
-                                        >
-                                            Relancer
-                                        </CustomButton>
+                                                        infoTranslateX.value = withTiming(0, {duration: 300});
+                                                        opacity.value = withTiming(1, {duration: 200});
+                                                    }, 300);
+                                                }}
+                                            >
+                                                Relancer
+                                            </CustomButton>
 
+                                        </View>
                                     </View>
                                 </View>
                             </View>
-                        </View>
-                    ) : page === "maps" ? (
+                        ) : page === "maps" ? (
                         <SafeAreaView style={{position: "relative", width: "100%", height: "100%"}}>
                             <View style={{margin: 20}}>
                                 <View style={{
@@ -364,6 +423,9 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+    loadingContainer: {flex: 1, alignItems: "center", justifyContent: "center"},
+    loadingText: {color: "#fff", fontSize: 18, fontWeight: "bold"},
+    overlay: {flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "rgba(0,0,0,0.8)"},
     container: {
         flex: 1,
         backgroundColor: '#fff',
