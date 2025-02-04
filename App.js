@@ -10,10 +10,9 @@ import RandomMapGeneration from "./pages/RandomMapGeneration";
 import NotFound from "./pages/NotFound";
 import {globalStyles} from "./styles/globalStyles";
 import Maps from "./pages/Maps";
-
+import {fadeOutSound} from "./utils";
 
 export default function App() {
-
     const {
         map,
         generateMap,
@@ -47,29 +46,31 @@ export default function App() {
         return () => sound && sound.unloadAsync();
     }, []);
 
+
     const toggleMusic = async (play) => {
         if (sound) {
             if (play) {
+                await sound.setVolumeAsync(1);
                 await sound.playAsync();
             } else {
-                await sound.stopAsync();
+                await fadeOutSound(sound, 1000);
             }
         }
     };
 
     const generateRandomMap = async () => {
         await toggleRandomLoading();
-    }
+    };
 
     const toggleRandomLoading = () => {
         return new Promise((resolve) => {
             setRandomLoading(true);
             toggleMusic(true);
 
-            setTimeout(() => {
+            setTimeout(async () => {
                 generateMap(map);
                 setRandomLoading(false);
-                toggleMusic(false);
+                await toggleMusic(false);
                 resolve();
             }, 5000);
         });
@@ -92,11 +93,10 @@ export default function App() {
                     map.name === "" && !randomLoading ? (
                         <Home generateRandomMap={generateRandomMap}/>
                     ) : randomLoading ? (
-                            <RandomMapGeneration/>
-                        ) :
-                        (
-                            <RandomMap/>
-                        ) : page === "maps" ? (
+                        <RandomMapGeneration/>
+                    ) : (
+                        <RandomMap/>
+                    ) : page === "maps" ? (
                         <Maps/>
                     ) : (
                         <NotFound/>
