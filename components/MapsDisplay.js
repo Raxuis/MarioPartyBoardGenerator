@@ -51,7 +51,8 @@ const AnimatedCard = ({item, color}) => {
                 fontSize: 20,
                 fontWeight: 'bold',
                 color: '#fff',
-                fontFamily: "ShinGoPro-Bold"
+                fontFamily: "ShinGoPro-Bold",
+                textAlign: "center",
             }}>{item.name}</Text>
             <Image
                 source={item.boardView}
