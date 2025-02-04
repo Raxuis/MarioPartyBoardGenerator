@@ -1,29 +1,24 @@
-import {StyleSheet, Text, TouchableOpacity} from "react-native";
+import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {globalStyles} from "../styles/globalStyles";
 
-const CustomButton = ({children, style, textStyle, onPress}) => {
+const CustomButton = ({children, style, textStyle, onPress, primary}) => {
     return (
         <TouchableOpacity
-            style={[styles.button, style]}
             onPress={onPress}
+            style={[primary ? globalStyles.CTAButtonPrimary : globalStyles.CTAButtonSecondary, style]}
         >
-            <Text style={[styles.buttonText, textStyle]}>
-                {children}
-            </Text>
+            <View style={styles.content}>
+                {primary && <View style={globalStyles.CTATriangle}/>}
+                <Text style={[globalStyles.CTAButtonText, textStyle]}>{children}</Text>
+            </View>
         </TouchableOpacity>
     );
 };
 
 const styles = StyleSheet.create({
-    button: {
-        backgroundColor: "blue",
-        padding: 10,
-        borderRadius: 5,
-        margin: 10,
-    },
-    buttonText: {
-        color: "white",
-        fontWeight: "bold",
-        textAlign: "center",
+    content: {
+        flexDirection: "row",
+        alignItems: "center",
     },
 });
 

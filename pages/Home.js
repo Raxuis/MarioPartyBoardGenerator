@@ -87,8 +87,8 @@ export default function Home({generateRandomMap}) {
                     />
                 </View>
                 <CustomButton
-                    style={globalStyles.CTAButton}
-                    textStyle={globalStyles.CTAButtonText}
+                    triangle={true}
+                    primary={true}
                     onPress={async () => {
                         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
                         await generateRandomMap();
@@ -97,8 +97,8 @@ export default function Home({generateRandomMap}) {
                     Générer une carte
                 </CustomButton>
                 <CustomButton
-                    style={[globalStyles.CTAButton, {marginTop: 0}]}
-                    textStyle={globalStyles.CTAButtonText}
+                    style={{marginTop: 15}}
+                    triangle={true}
                     onPress={() => {
                         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
                         setPage("maps");

@@ -1,12 +1,11 @@
-import {StyleSheet} from "react-native";
+import { StyleSheet } from "react-native";
 
 export const globalStyles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: "relative",
+        backgroundColor: "#fff",
+        alignItems: "center",
+        justifyContent: "center",
         width: "100%",
         height: "100%",
     },
@@ -20,22 +19,58 @@ export const globalStyles = StyleSheet.create({
         width: "100%",
         height: "100%",
     },
-    CTAButton: {
+    // Bouton ORANGE (Primary)
+    CTAButtonPrimary: {
         marginTop: 25,
-        backgroundColor: "red",
-        width: 300,
+        backgroundColor: "#FFA500",
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 25,
+        borderWidth: 2,
+        borderColor: "#FFD700",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "row",
+    },
+    // Bouton BLANC (Secondary)
+    CTAButtonSecondary: {
+        marginTop: 25,
+        backgroundColor: "#FFFFFF",
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 25,
+        borderWidth: 2,
+        borderColor: "#DDDDDD",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "row",
     },
     CTAButtonText: {
-        color: "white",
-        fontSize: 16,
+        color: "#2E2E2E",
         fontWeight: "bold",
-        fontFamily: "Super-Mario",
+        fontSize: 16,
+        fontFamily: "ShinGoPro-Bold",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    CTATriangle: {
+        width: 0,
+        height: 0,
+        marginRight: 10,
+        borderTopWidth: 8,
+        borderBottomWidth: 8,
+        borderLeftWidth: 12,
+        borderTopColor: "transparent",
+        borderBottomColor: "transparent",
+        borderLeftColor: "#FFD700",
     },
     Inset0Element: {
-        position: 'absolute',
+        position: "absolute",
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
-    }
+    },
 });

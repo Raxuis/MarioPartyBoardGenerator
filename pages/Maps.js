@@ -1,29 +1,16 @@
 import React from 'react';
 import { SafeAreaView, Text, View, StyleSheet } from "react-native";
-import CustomButton from "../components/CustomButton";
 import { nintendoColor } from "../constants";
-import * as Haptics from "expo-haptics";
-import { ArrowBigLeft } from "lucide-react-native";
 import MapsDisplay from "../components/MapsDisplay";
-import { useStore } from "../store/store";
+import * as Haptics from "expo-haptics";
+import CustomButton from "../components/CustomButton";
+import {useStore} from "../store/store";
 
 const Maps = () => {
     const { resetMap, setPage } = useStore();
-
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <CustomButton
-                    style={styles.backButton}
-                    textStyle={styles.backButtonText}
-                    onPress={() => {
-                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                        resetMap();
-                        setPage("home");
-                    }}
-                >
-                    <ArrowBigLeft color="white" size={26} />
-                </CustomButton>
                 <Text style={styles.title}>
                     Super Mario Party Jamboree Maps
                 </Text>
@@ -33,7 +20,26 @@ const Maps = () => {
                     <MapsDisplay />
                 </View>
             </View>
+
+            <View style={styles.buttonWrapper}>
+                <CustomButton
+                    primary={false}
+                    style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                    onPress={() => {
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                        resetMap();
+                        setPage("home");
+                    }}
+                >
+                    Retour
+                </CustomButton>
+            </View>
         </SafeAreaView>
+
     );
 };
 
@@ -66,6 +72,7 @@ const styles = StyleSheet.create({
         color: nintendoColor,
         marginLeft: 20,
         flex: 1,
+        textAlign: "center",
     },
     mapsWrapper: {
         flex: 1,
@@ -75,8 +82,12 @@ const styles = StyleSheet.create({
         flex: 1,
         borderRadius: 10,
         overflow: "hidden",
-        marginVertical: 10,
+        marginTop: 10,
     },
+    buttonWrapper: {
+        justifyContent: "flex-end",
+        alignItems: "center",
+    }
 });
 
 export default Maps;

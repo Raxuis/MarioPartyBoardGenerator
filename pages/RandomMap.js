@@ -54,66 +54,66 @@ const RandomMap = () => {
                     justifyContent: "center",
                     backgroundColor: "rgba(0, 0, 0, 0.8)",
                 }]}>
-                <View
-                    style={[globalStyles.centeredContainer, {
+                <View>
+                    <View style={[globalStyles.centeredContainer, {
                         padding: 20,
                     }]}>
-                    <Animated.Image
-                        source={map.boardIcon}
-                        style={{
-                            width: iconWidth,
-                            height: iconHeight,
-                            opacity: opacity,
-                            resizeMode: 'contain',
-                            transform: [{translateX: infoTranslateX}]
-                        }}
-                    />
-                    <Text style={{
-                        fontFamily: "ShinGoPro-Bold",
-                        fontSize: 24,
-                        textAlign: "center",
-                        color: "white",
-                        marginTop: 20,
-                    }}>
-                        {map.name}
-                    </Text>
-                    <Text style={{
-                        fontFamily: "ShinGoPro",
-                        fontSize: 12,
-                        textAlign: "center",
-                        paddingTop: 10,
-                        opacity: 0.7,
-                        color: "white"
-                    }}>
-                        {map.description}
-                    </Text>
+                        <Animated.Image
+                            source={map.boardIcon}
+                            style={{
+                                width: iconWidth,
+                                height: iconHeight,
+                                opacity: opacity,
+                                resizeMode: 'contain',
+                                transform: [{translateX: infoTranslateX}]
+                            }}
+                        />
+                        <Text style={{
+                            fontFamily: "ShinGoPro-Bold",
+                            fontSize: 24,
+                            textAlign: "center",
+                            color: "white",
+                            marginTop: 20,
+                        }}>
+                            {map.name}
+                        </Text>
+                        <Text style={{
+                            fontFamily: "ShinGoPro",
+                            fontSize: 14,
+                            textAlign: "center",
+                            paddingTop: 10,
+                            opacity: 0.7,
+                            color: "white",
+                            maxWidth: 300,
+                        }}>
+                            {map.description}
+                        </Text>
+                    </View>
                     <View style={{
                         display: "flex",
                         flexDirection: "row",
-                        justifyContent: "space-between"
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: 20,
                     }}>
                         <CustomButton
-                            style={[globalStyles.CTAButton, {
-                                padding: 2,
-                                width: 50,
+                            primary={false}
+                            style={{
                                 display: "flex",
+                                flexDirection: "row",
                                 alignItems: "center",
-                                justifyContent: "center"
-                            }]}
-                            textStyle={{
-                                fontSize: 12,
-                                fontFamily: "ShinGoPro-Bold",
+                                justifyContent: "center",
                             }}
                             onPress={() => {
                                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
                                 resetMap();
                             }}
                         >
-                            <ArrowBigLeft color="white" size={26}/>
+                            Retour
                         </CustomButton>
                         <CustomButton
-                            style={[globalStyles.CTAButton, {flex: 1}]}
-                            textStyle={globalStyles.CTAButtonText}
+                            triangle={true}
+                            primary={true}
                             onPress={() => {
                                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
                                 opacity.value = withTiming(0, {duration: 200});
