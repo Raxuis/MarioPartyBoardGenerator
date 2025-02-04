@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Text, Image, ScrollView} from 'react-native';
+import {Text, Image, ScrollView, View} from 'react-native';
 import Animated, {
     useAnimatedStyle,
     useSharedValue,
@@ -7,6 +7,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import {data} from '../constants';
 import {getRandomGameColor} from "../utils";
+import {globalStyles} from "../styles/globalStyles";
+import {BlurView} from "expo-blur";
 
 const AnimatedCard = ({item, color}) => {
     const opacity = useSharedValue(0);
@@ -32,39 +34,61 @@ const AnimatedCard = ({item, color}) => {
         <Animated.View
             style={[
                 {
-                    backgroundColor: color || '#000',
-                    padding: 15,
-                    borderRadius: 10,
+                    width: "100%",
+                    borderRadius: 20,
                     marginBottom: 20,
-                    width: 350,
                     alignItems: 'center',
-                    shadowColor: '#000',
-                    shadowOffset: {width: 0, height: 2},
-                    shadowOpacity: 0.2,
-                    shadowRadius: 3,
                     elevation: 5,
+                    position: 'relative',
                 },
                 animatedStyle
             ]}
         >
-            <Text style={{
-                fontSize: 20,
-                fontWeight: 'bold',
-                color: '#fff',
-                fontFamily: "ShinGoPro-Bold",
-                textAlign: "center",
-            }}>{item.name}</Text>
             <Image
                 source={item.boardView}
-                style={{width: 300, height: 150, marginVertical: 10, borderRadius: 10}}
-                resizeMode="cover"
+                style={[
+                    {
+                        overflow: 'hidden',
+                        borderRadius: 20,
+                    }, globalStyles.Inset0Element, globalStyles.fullSize]}
             />
-            <Text style={{
-                fontSize: 16,
-                color: '#fff',
-                textAlign: 'center',
-                fontFamily: "ShinGoPro"
-            }}>{item.description}</Text>
+            <BlurView
+                intensity={20}
+                tint="dark"
+                style={[
+                    globalStyles.fullSize,
+                    globalStyles.Inset0Element,
+                    {
+                        overflow: 'hidden',
+                        borderRadius: 20
+                    }
+                ]}
+            />
+            <View style={[{
+                padding: 15,
+                alignItems: 'center',
+                justifyContent: 'center',
+            }]}>
+                <Text style={{
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    color: '#fff',
+                    fontFamily: "ShinGoPro-Bold",
+                    textAlign: "center",
+                }}>{item.name}</Text>
+
+                <Image
+                    source={item.boardView}
+                    style={{width: 300, height: 150, marginVertical: 10, borderRadius: 20, overflow: "hidden"}}
+                    resizeMode="cover"
+                />
+                <Text style={{
+                    fontSize: 16,
+                    color: '#fff',
+                    textAlign: 'center',
+                    fontFamily: "ShinGoPro",
+                }}>{item.description}</Text>
+            </View>
         </Animated.View>
     );
 };
@@ -89,8 +113,7 @@ const MapsDisplay = () => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: 'center',
-                padding: 20,
-                paddingBottom: 80
+                paddingBottom: 180,
             }}
         >
             {data.map((item, index) => (

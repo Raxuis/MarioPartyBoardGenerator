@@ -94,7 +94,7 @@ export default function Home({generateRandomMap}) {
                         await generateRandomMap();
                     }}
                 >
-                    Choisir une carte
+                    Générer une carte
                 </CustomButton>
                 <CustomButton
                     style={[globalStyles.CTAButton, {marginTop: 0}]}

@@ -31,4 +31,11 @@ export const globalStyles = StyleSheet.create({
         fontWeight: "bold",
         fontFamily: "Super-Mario",
     },
+    Inset0Element: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+    }
 });

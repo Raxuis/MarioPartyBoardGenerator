@@ -7,12 +7,13 @@ import {ArrowBigLeft} from "lucide-react-native";
 import MapsDisplay from "../components/MapsDisplay";
 import {useStore} from "../store/store";
 import {globalStyles} from "../styles/globalStyles";
+import {LinearGradient} from "expo-linear-gradient";
 
 const Maps = () => {
     const {resetMap, setPage} = useStore();
     return (
         <SafeAreaView style={[{position: "relative"}, globalStyles.fullSize]}>
-            <View style={{margin: 20}}>
+            <View>
                 <View style={{
                     display: "flex",
                     flexDirection: "row",
@@ -52,7 +53,14 @@ const Maps = () => {
                         Super Mario Party Jamboree Maps
                     </Text>
                 </View>
-                <MapsDisplay/>
+                <View style={{
+                    marginHorizontal: 20,
+                    marginVertical: 10,
+                    borderRadius: 10,
+                    overflow: "hidden"
+                }}>
+                    <MapsDisplay/>
+                </View>
             </View>
         </SafeAreaView>
     );
