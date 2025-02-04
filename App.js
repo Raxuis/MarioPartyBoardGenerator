@@ -23,11 +23,10 @@ export default function App() {
 
     const {map, generateMap, resetMap, page, setPage} = useStore();
     const [sound, setSound] = useState(null);
-    const [_, setIsPlaying] = useState(false);
     const [randomLoading, setRandomLoading] = useState(false);
     const shuffleTranslateY = useSharedValue(0);
     const shuffleAnimatedStyle = useAnimatedStyle(() => ({
-        transform: [{translateY: shuffleTranslateY.value}],
+        transform: [{translateY: shuffleTranslateY.value}]
     }));
 
     const [loaded, error] = useFonts({
@@ -42,10 +41,10 @@ export default function App() {
     });
 
     const opacity = useSharedValue(0);
-    const homeIconWidth = useSharedValue(0);
-    const homeIconHeight = useSharedValue(0);
-    const iconWidth = useSharedValue(180);
-    const iconHeight = useSharedValue(180);
+    const homeIconWidth = useSharedValue(180);
+    const homeIconHeight = useSharedValue(180);
+    const iconWidth = useSharedValue(0);
+    const iconHeight = useSharedValue(0);
     const infoTranslateX = useSharedValue(0);
     const starTranslateX = useSharedValue(0);
     const starTranslateY = useSharedValue(0);
@@ -70,10 +69,8 @@ export default function App() {
         if (sound) {
             if (play) {
                 await sound.playAsync();
-                setIsPlaying(true);
             } else {
                 await sound.stopAsync();
-                setIsPlaying(false);
             }
         }
     };
@@ -90,38 +87,50 @@ export default function App() {
         shuffleTranslateY.value = withTiming(0, {duration: 300});
     };
 
-    const toggleRandomLoading = () => {
-        setRandomLoading(true);
-        toggleMusic(true);
-        startShuffleAnimation();
+    const generateRandomMap = async () => {
+        await toggleRandomLoading();
+        resetHomeAnimations();
+    }
 
-        setTimeout(() => {
-            generateMap(map);
-            setRandomLoading(false);
-            toggleMusic(false);
-            stopShuffleAnimation();
-        }, 5000);
+    const toggleRandomLoading = () => {
+        return new Promise((resolve) => {
+            setRandomLoading(true);
+            toggleMusic(true);
+            startShuffleAnimation();
+
+            setTimeout(() => {
+                generateMap(map);
+                setRandomLoading(false);
+                toggleMusic(false);
+                stopShuffleAnimation();
+                resolve();
+            }, 5000);
+        });
     };
 
     const resetHomeAnimations = () => {
-        opacity.value = withTiming(1, {
-            duration: 300,
-            easing: Easing.elastic(1),
-            reduceMotion: ReduceMotion.System,
-        });
-        homeIconWidth.value = withTiming(200, {
-            duration: 300,
-            easing: Easing.elastic(1),
-            reduceMotion: ReduceMotion.System,
-        });
-        homeIconHeight.value = withTiming(200, {
-            duration: 300,
-            easing: Easing.elastic(1),
-            reduceMotion: ReduceMotion.System,
-        });
-        starTranslateX.value = 0;
-        starTranslateY.value = 0;
-        starScale.value = 1;
+        if (page === "home" && !randomLoading) {
+            opacity.value = withTiming(1, {
+                duration: 300,
+                easing: Easing.elastic(1),
+                reduceMotion: ReduceMotion.System,
+            });
+            console.log(iconWidth);
+            console.log(iconHeight);
+            iconWidth.value = withTiming(200, {
+                duration: 300,
+                easing: Easing.elastic(1),
+                reduceMotion: ReduceMotion.System,
+            });
+            iconHeight.value = withTiming(200, {
+                duration: 300,
+                easing: Easing.elastic(1),
+                reduceMotion: ReduceMotion.System,
+            });
+            starTranslateX.value = 0;
+            starTranslateY.value = 0;
+            starScale.value = 1;
+        }
     }
 
 
@@ -131,18 +140,19 @@ export default function App() {
             easing: Easing.elastic(1),
             reduceMotion: ReduceMotion.System,
         });
-        homeIconWidth.value = withTiming(0, {
+        iconWidth.value = withTiming(0, {
             duration: 300,
             easing: Easing.elastic(1),
             reduceMotion: ReduceMotion.System,
         });
-        homeIconHeight.value = withTiming(0, {
+        iconHeight.value = withTiming(0, {
             duration: 300,
             easing: Easing.elastic(1),
             reduceMotion: ReduceMotion.System,
         });
-        iconHeight.value = 180;
-        iconWidth.value = 180;
+
+        homeIconHeight.value = 180;
+        homeIconWidth.value = 180;
         starTranslateX.value = 0;
         starTranslateY.value = 0;
         starScale.value = 1;
@@ -156,9 +166,9 @@ export default function App() {
 
 
     useEffect(() => {
-        if (page === "home") {
-            iconHeight.value = withRepeat(withTiming(200, {duration: 1000}), -1, true);
-            iconWidth.value = withRepeat(withTiming(200, {duration: 1000}), -1, true);
+        if (page === "home" && !randomLoading) {
+            homeIconHeight.value = withRepeat(withTiming(200, {duration: 1000}), -1, true);
+            homeIconWidth.value = withRepeat(withTiming(200, {duration: 1000}), -1, true);
 
             starTranslateX.value = withRepeat(
                 withTiming(windowWidth - 70, {
@@ -188,6 +198,11 @@ export default function App() {
             );
         }
     });
+
+    useEffect(() => {
+        console.log(iconHeight)
+        console.log(iconWidth)
+    }, [iconHeight, iconWidth])
 
     useEffect(() => {
         if (loaded || error) {
@@ -225,8 +240,8 @@ export default function App() {
                                     <Animated.Image
                                         source={require('./assets/icon.png')}
                                         style={{
-                                            width: iconWidth,
-                                            height: iconHeight,
+                                            width: homeIconWidth,
+                                            height: homeIconHeight,
                                             resizeMode: 'contain',
                                         }}
                                     />
@@ -234,11 +249,9 @@ export default function App() {
                                 <CustomButton
                                     style={styles.CTAButton}
                                     textStyle={styles.CTAButtonText}
-                                    onPress={() => {
-                                        toggleRandomLoading();
-
+                                    onPress={async () => {
                                         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-                                        resetHomeAnimations();
+                                        await generateRandomMap();
                                     }}
                                 >
                                     Choisir une carte
@@ -247,8 +260,8 @@ export default function App() {
                                     style={[styles.CTAButton, {marginTop: 0}]}
                                     textStyle={styles.CTAButtonText}
                                     onPress={() => {
-                                        setPage("maps");
                                         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+                                        setPage("maps");
                                     }}
                                 >
                                     Voir toutes les cartes
@@ -262,17 +275,30 @@ export default function App() {
                         ) :
                         (
                             <View style={styles.container}>
-                                <Image
-                                    source={map.boardView}
-                                    style={[styles.fullSize, {
-                                        position: "absolute",
-                                        top: 0,
-                                        left: 0,
-                                        right: 0,
-                                        bottom: 0,
-                                        resizeMode: "cover",
-                                    }]}
-                                />
+                                {
+                                    map.boardView ? (
+                                        <Image
+                                            source={map.boardView}
+                                            style={[styles.fullSize, {
+                                                position: "absolute",
+                                                top: 0,
+                                                left: 0,
+                                                right: 0,
+                                                bottom: 0,
+                                                resizeMode: "cover",
+                                            }]}
+                                        />) : (
+                                        <View style={[styles.fullSize, {
+                                            position: "absolute",
+                                            top: 0,
+                                            left: 0,
+                                            right: 0,
+                                            bottom: 0,
+                                            backgroundColor: "white",
+                                        }]}/>
+                                    )
+                                }
+
                                 <View
                                     style={[styles.fullSize, {
                                         display: "flex",
@@ -287,8 +313,8 @@ export default function App() {
                                         <Animated.Image
                                             source={map.boardIcon}
                                             style={{
-                                                width: homeIconWidth,
-                                                height: homeIconHeight,
+                                                width: iconWidth,
+                                                height: iconHeight,
                                                 opacity: opacity,
                                                 resizeMode: 'contain',
                                                 transform: [{translateX: infoTranslateX}]
@@ -336,7 +362,7 @@ export default function App() {
                                                     goBack()
                                                 }}
                                             >
-                                                <ArrowBigLeft color="yellow" size={26}/>
+                                                <ArrowBigLeft color="white" size={26}/>
                                             </CustomButton>
                                             <CustomButton
                                                 style={[styles.CTAButton, {flex: 1}]}
@@ -451,7 +477,7 @@ const styles = StyleSheet.create({
         width: 300,
     },
     CTAButtonText: {
-        color: "yellow",
+        color: "white",
         fontSize: 16,
         fontWeight: "bold",
         fontFamily: "Super-Mario",
