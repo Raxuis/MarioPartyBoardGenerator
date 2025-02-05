@@ -1,13 +1,13 @@
-import React from 'react';
-import { SafeAreaView, Text, View, StyleSheet } from "react-native";
-import { nintendoColor } from "../constants";
+import {SafeAreaView, Text, View, StyleSheet} from "react-native";
+import {nintendoColor} from "../constants";
 import MapsDisplay from "../components/MapsDisplay";
 import * as Haptics from "expo-haptics";
 import CustomButton from "../components/CustomButton";
 import {useStore} from "../store/store";
 
-const Maps = () => {
-    const { resetMap, setPage } = useStore();
+const Maps = ({toggleMapsMusics}) => {
+    const {resetMap, setPage} = useStore();
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -17,7 +17,7 @@ const Maps = () => {
             </View>
             <View style={styles.mapsWrapper}>
                 <View style={styles.mapsContainer}>
-                    <MapsDisplay />
+                    <MapsDisplay/>
                 </View>
             </View>
 
@@ -29,10 +29,11 @@ const Maps = () => {
                         alignItems: "center",
                         justifyContent: "center",
                     }}
-                    onPress={() => {
+                    onPress={async () => {
                         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
                         resetMap();
                         setPage("home");
+                        await toggleMapsMusics();
                     }}
                 >
                     Retour

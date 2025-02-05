@@ -6,7 +6,7 @@ import {useStore} from "../store/store";
 import {globalStyles} from "../styles/globalStyles";
 import {useEffect} from "react";
 
-export default function Home({generateRandomMap}) {
+export default function Home({toggleMapsMusics, generateRandomMap}) {
     const {setPage} = useStore();
 
     const windowWidth = Dimensions.get('window').width;
@@ -99,9 +99,10 @@ export default function Home({generateRandomMap}) {
                 <CustomButton
                     style={{marginTop: 15}}
                     triangle={true}
-                    onPress={() => {
+                    onPress={async () => {
                         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
                         setPage("maps");
+                        await toggleMapsMusics();
                     }}
                 >
                     Voir toutes les cartes

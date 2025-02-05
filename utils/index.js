@@ -21,3 +21,14 @@ export const fadeOutSound = async (sound, duration = 1000) => {
 export const shuffleArray = (array) => {
     return [...array].sort(() => Math.random() - 0.5);
 };
+
+export const toggleMusic = async (sound, play) => {
+    if (sound) {
+        if (play) {
+            await sound.setVolumeAsync(0.5);
+            await sound.playAsync();
+        } else {
+            await fadeOutSound(sound, 1000);
+        }
+    }
+};
