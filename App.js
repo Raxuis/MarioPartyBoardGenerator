@@ -50,7 +50,7 @@ export default function App() {
     const toggleMusic = async (play) => {
         if (sound) {
             if (play) {
-                await sound.setVolumeAsync(1);
+                await sound.setVolumeAsync(0.5);
                 await sound.playAsync();
             } else {
                 await fadeOutSound(sound, 1000);
