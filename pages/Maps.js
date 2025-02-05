@@ -12,7 +12,7 @@ const Maps = ({toggleMapsMusics}) => {
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.title}>
-                    Super Mario Party Jamboree Maps
+                    Les 7 Cartes Disponibles
                 </Text>
             </View>
             <View style={styles.mapsWrapper}>
@@ -71,7 +71,6 @@ const styles = StyleSheet.create({
         fontFamily: "ShinGoPro-Bold",
         fontSize: 24,
         color: nintendoColor,
-        marginLeft: 20,
         flex: 1,
         textAlign: "center",
     },
