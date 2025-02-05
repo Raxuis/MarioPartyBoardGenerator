@@ -10,7 +10,7 @@ import RandomMapGeneration from "./pages/RandomMapGeneration";
 import NotFound from "./pages/NotFound";
 import {globalStyles} from "./styles/globalStyles";
 import Maps from "./pages/Maps";
-import {fadeOutSound} from "./utils";
+import {toggleMusic} from "./utils";
 
 export default function App() {
     const {
@@ -19,7 +19,8 @@ export default function App() {
         page
     } = useStore();
 
-    const [sound, setSound] = useState(null);
+    const [randomSound, setRandomSound] = useState(null);
+    const [mapsSound, setMapsSound] = useState(null);
     const [randomLoading, setRandomLoading] = useState(false);
 
     const [loaded, error] = useFonts({
@@ -34,45 +35,52 @@ export default function App() {
     });
 
     useEffect(() => {
-        async function loadSound() {
+        async function loadRandomSound() {
             const {sound} = await Audio.Sound.createAsync(
                 require('./assets/sounds/random.mp3'),
                 {shouldPlay: false, isLooping: true}
             );
-            setSound(sound);
+            setRandomSound(sound);
         }
 
-        loadSound();
-        return () => sound && sound.unloadAsync();
+        async function loadMapsSound() {
+            const {sound} = await Audio.Sound.createAsync(
+                require('./assets/sounds/maps.mp3'),
+                {shouldPlay: false, isLooping: true}
+            );
+            setMapsSound(sound);
+        }
+
+        loadRandomSound();
+        loadMapsSound();
+
+        return () => {
+            randomSound && randomSound.unloadAsync();
+            mapsSound && mapsSound.unloadAsync();
+        }
     }, []);
 
-
-    const toggleMusic = async (play) => {
-        if (sound) {
-            if (play) {
-                await sound.setVolumeAsync(0.5);
-                await sound.playAsync();
-            } else {
-                await fadeOutSound(sound, 1000);
-            }
-        }
-    };
-
     const generateRandomMap = async () => {
-        await toggleRandomLoading();
-    };
+      await toggleRandomLoading();
+  };
 
-    const toggleRandomLoading = async () => {
-        setRandomLoading(true);
-        toggleMusic(true);
+  const toggleRandomLoading = async () => {
+      setRandomLoading(true);
+      await toggleMusic(randomSound, true);
 
-        await generateMap(map);
+      await generateMap(map);
 
-        setTimeout(() => {
-            setRandomLoading(false);
-            toggleMusic(false);
-        }, 5000);
-    };
+      setTimeout(() => {
+          setRandomLoading(false);
+          toggleMusic(randomSound, false);
+      }, 5000);
+  };
+
+    const toggleMapsMusics = async () => {
+        mapsSound.getStatusAsync().then(status => {
+            toggleMusic(mapsSound, !status.isPlaying);
+        });
+    }
 
 
     useEffect(() => {
@@ -90,13 +98,18 @@ export default function App() {
             {
                 page === "home" ?
                     map.id === 0 && !randomLoading ? (
-                        <Home generateRandomMap={generateRandomMap}/>
+                        <Home
+                            generateRandomMap={generateRandomMap}
+                            toggleMapsMusics={toggleMapsMusics}
+                        />
                     ) : randomLoading ? (
                         <RandomMapGeneration/>
                     ) : (
                         <RandomMap/>
                     ) : page === "maps" ? (
-                        <Maps/>
+                        <Maps
+                            toggleMapsMusics={toggleMapsMusics}
+                        />
                     ) : (
                         <NotFound/>
                     )
