@@ -1,3 +1,5 @@
+export const CAROUSEL_DURATION = 5000;
+
 export const data = [
     {
         id: '1',

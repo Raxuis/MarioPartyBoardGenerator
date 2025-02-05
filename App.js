@@ -61,20 +61,20 @@ export default function App() {
     }, []);
 
     const generateRandomMap = async () => {
-        await toggleRandomLoading();
-    };
+      await toggleRandomLoading();
+  };
 
-    const toggleRandomLoading = async () => {
-        setRandomLoading(true);
-        await toggleMusic(randomSound, true);
+  const toggleRandomLoading = async () => {
+      setRandomLoading(true);
+      await toggleMusic(randomSound, true);
 
-        await generateMap(map);
+      await generateMap(map);
 
-        setTimeout(() => {
-            setRandomLoading(false);
-            toggleMusic(randomSound, false);
-        }, 5000);
-    };
+      setTimeout(() => {
+          setRandomLoading(false);
+          toggleMusic(randomSound, false);
+      }, 5000);
+  };
 
     const toggleMapsMusics = async () => {
         mapsSound.getStatusAsync().then(status => {

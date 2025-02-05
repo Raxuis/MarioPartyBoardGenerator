@@ -1,12 +1,22 @@
 import React, {useEffect} from 'react';
 import LoadingCarousel from "../components/LoadingCarousel";
-import Animated, {Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming} from "react-native-reanimated";
+import Animated, {
+    Easing,
+    useAnimatedStyle,
+    useSharedValue,
+    withRepeat,
+    withTiming,
+    withSequence
+} from "react-native-reanimated";
 import {globalStyles} from "../styles/globalStyles";
+import { CAROUSEL_DURATION } from '../constants';
 
-const RandomMapGeneration = () => {
+const RandomMapGeneration = ({onAnimationComplete}) => {
     const shuffleTranslateY = useSharedValue(0);
+    const opacity = useSharedValue(1);
 
     const shuffleAnimatedStyle = useAnimatedStyle(() => ({
+        opacity: opacity.value,
         transform: [{translateY: shuffleTranslateY.value}]
     }));
 
@@ -17,10 +27,18 @@ const RandomMapGeneration = () => {
             true
         );
 
+        setTimeout(() => {
+            opacity.value = withTiming(0, {
+                duration: 300,
+                easing: Easing.out(Easing.ease)
+            });
+        }, CAROUSEL_DURATION - 300);
+
         return () => {
             shuffleTranslateY.value = 0;
+            opacity.value = 1;
         }
-    })
+    }, []);
 
     return (
         <Animated.View style={[globalStyles.loadingContainer, shuffleAnimatedStyle]}>

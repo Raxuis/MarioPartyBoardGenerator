@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import {View, Text, Image, Dimensions, Animated, StyleSheet} from 'react-native';
 import * as Haptics from 'expo-haptics';
 import {useStore} from '../store/store';
-import {data} from '../constants';
+import {CAROUSEL_DURATION, data} from '../constants';
 import {shuffleArray} from "../utils";
 
 const {width} = Dimensions.get('window');
@@ -12,8 +12,6 @@ const LoadingCarousel = () => {
     const flatListRef = useRef(null);
     const currentIndexRef = useRef(0);
     const {map} = useStore();
-
-    const TOTAL_DURATION = 5000;
 
     useEffect(() => {
         if (map.id !== 0) {
@@ -27,7 +25,7 @@ const LoadingCarousel = () => {
     useEffect(() => {
         if (shuffledData.length === 0) return;
 
-        const intervalDuration = Math.floor(TOTAL_DURATION / shuffledData.length);
+        const intervalDuration = Math.floor(CAROUSEL_DURATION / shuffledData.length);
 
         const interval = setInterval(() => {
             const nextIndex = currentIndexRef.current === shuffledData.length - 1
