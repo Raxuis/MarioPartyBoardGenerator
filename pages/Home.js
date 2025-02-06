@@ -1,13 +1,15 @@
 import Animated, {Easing, useSharedValue, withRepeat, withTiming} from "react-native-reanimated";
-import {Platform, SafeAreaView, StatusBar, View, StyleSheet, Dimensions} from "react-native";
+import {Platform, SafeAreaView, StatusBar, View, StyleSheet, Dimensions, TouchableOpacity} from "react-native";
 import CustomButton from "../components/CustomButton";
 import * as Haptics from "expo-haptics";
 import {useStore} from "../store/store";
 import {globalStyles} from "../styles/globalStyles";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+import {Audio} from "expo-av";
 
 export default function Home({toggleMapsMusic, generateRandomMap}) {
     const {setPage} = useStore();
+    const [sound, setSound] = useState(null);
 
     const windowWidth = Dimensions.get('window').width;
 
@@ -58,10 +60,39 @@ export default function Home({toggleMapsMusic, generateRandomMap}) {
         }
     });
 
+    useEffect(() => {
+        const loadSound = async () => {
+            const {sound} = await Audio.Sound.createAsync(
+                require('../assets/sounds/easter-egg.mp3'),
+                {shouldPlay: false}
+            );
+            setSound(sound);
+        };
+
+        loadSound();
+
+        return () => {
+            sound?.unloadAsync();
+        };
+    }, []);
+
+    const handlePress = async () => {
+        if (sound) {
+            await sound.stopAsync();
+            await sound.setPositionAsync(0);
+            await sound.playAsync();
+        } else {
+            const {sound: newSound} = await Audio.Sound.createAsync(
+                require('../assets/sounds/easter-egg.mp3'),
+            );
+            setSound(newSound);
+            await newSound.playAsync();
+        }
+    }
+
     return (
         <SafeAreaView style={[{position: "relative"}, globalStyles.fullSize]}>
-            <Animated.Image
-                source={require('../assets/star.png')}
+            <Animated.View
                 style={[styles.star, {
                     top: Platform.OS === 'ios'
                         ? 50
@@ -74,7 +105,20 @@ export default function Home({toggleMapsMusic, generateRandomMap}) {
                         {scale: starScale}
                     ],
                 }]}
-            />
+            >
+                <TouchableOpacity onPress={() => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    handlePress();
+                }}>
+                    <Animated.Image
+                        source={require('../assets/star.png')}
+                        style={{
+                            width: 60,
+                            height: 60,
+                        }}
+                    />
+                </TouchableOpacity>
+            </Animated.View>
             <View style={[globalStyles.centeredContainer, globalStyles.fullSize]}>
                 <View style={styles.imageContainer}>
                     <Animated.Image
