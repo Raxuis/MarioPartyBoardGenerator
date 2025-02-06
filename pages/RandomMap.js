@@ -113,6 +113,7 @@ const RandomMap = () => {
                         <CustomButton
                             triangle={true}
                             primary={true}
+                            type="forward"
                             onPress={() => {
                                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
                                 opacity.value = withTiming(0, {duration: 200});

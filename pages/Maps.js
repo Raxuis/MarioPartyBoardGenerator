@@ -5,7 +5,7 @@ import * as Haptics from "expo-haptics";
 import CustomButton from "../components/CustomButton";
 import {useStore} from "../store/store";
 
-const Maps = ({toggleMapsMusics}) => {
+const Maps = ({toggleMapsMusic}) => {
     const {resetMap, setPage} = useStore();
 
     return (
@@ -29,11 +29,12 @@ const Maps = ({toggleMapsMusics}) => {
                         alignItems: "center",
                         justifyContent: "center",
                     }}
+                    type="back"
                     onPress={async () => {
                         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                        await toggleMapsMusic(300);
                         resetMap();
                         setPage("home");
-                        await toggleMapsMusics();
                     }}
                 >
                     Retour

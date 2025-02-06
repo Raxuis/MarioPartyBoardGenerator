@@ -22,13 +22,24 @@ export const shuffleArray = (array) => {
     return [...array].sort(() => Math.random() - 0.5);
 };
 
-export const toggleMusic = async (sound, play) => {
-    if (sound) {
-        if (play) {
-            await sound.setVolumeAsync(0.5);
-            await sound.playAsync();
-        } else {
-            await fadeOutSound(sound, 1000);
-        }
+export const playMusic = async (sound) => {
+    if (!sound) return;
+
+    await sound.setVolumeAsync(0.5);
+    await sound.playAsync();
+}
+
+export const toggleMusic = async (sound, duration = 1000) => {
+    if (!sound) return;
+
+    const status = await sound.getStatusAsync();
+
+    if (status.isLoading) return;
+
+    if (status.isPlaying) {
+        await fadeOutSound(sound, duration);
+    } else {
+        await sound.setVolumeAsync(0.5);
+        await sound.playAsync();
     }
-};
+}

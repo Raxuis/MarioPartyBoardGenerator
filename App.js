@@ -61,25 +61,23 @@ export default function App() {
     }, []);
 
     const generateRandomMap = async () => {
-      await toggleRandomLoading();
-  };
+        await toggleRandomLoading();
+    };
 
-  const toggleRandomLoading = async () => {
-      setRandomLoading(true);
-      await toggleMusic(randomSound, true);
+    const toggleRandomLoading = async () => {
+        setRandomLoading(true);
+        await toggleMusic(randomSound);
 
-      await generateMap(map);
+        await generateMap(map);
 
-      setTimeout(() => {
-          setRandomLoading(false);
-          toggleMusic(randomSound, false);
-      }, 5000);
-  };
+        setTimeout(() => {
+            setRandomLoading(false);
+            toggleMusic(randomSound);
+        }, 5000);
+    };
 
-    const toggleMapsMusics = async () => {
-        mapsSound.getStatusAsync().then(status => {
-            toggleMusic(mapsSound, !status.isPlaying);
-        });
+    const toggleMapsMusic = async (duration = 1000) => {
+        await toggleMusic(mapsSound, duration);
     }
 
 
@@ -100,7 +98,7 @@ export default function App() {
                     map.id === 0 && !randomLoading ? (
                         <Home
                             generateRandomMap={generateRandomMap}
-                            toggleMapsMusics={toggleMapsMusics}
+                            toggleMapsMusic={toggleMapsMusic}
                         />
                     ) : randomLoading ? (
                         <RandomMapGeneration/>
@@ -108,7 +106,7 @@ export default function App() {
                         <RandomMap/>
                     ) : page === "maps" ? (
                         <Maps
-                            toggleMapsMusics={toggleMapsMusics}
+                            toggleMapsMusic={toggleMapsMusic}
                         />
                     ) : (
                         <NotFound/>
