@@ -125,6 +125,3 @@ To get started with the project, follow these steps:
 ---
 
 Made with ❤️ by [Raxuis](https://github.com/Raxuis)
-
-```
-
