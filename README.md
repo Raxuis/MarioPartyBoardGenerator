@@ -92,7 +92,7 @@ To get started with the project, follow these steps:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/random-map-generator.git
+   git clone https://github.com/Raxuis/random-map-generator.git
    ```
 
 2. Navigate to the project folder:
@@ -102,10 +102,12 @@ To get started with the project, follow these steps:
 
 3. Install dependencies:
    ```bash
-   npm install
-   # If not working :
-    npm install --force
+   npm install 
    ```
+    or If not working :
+    ```bash
+     npm install --force
+    ```
 
 4. Run the development server:
    ```bash
