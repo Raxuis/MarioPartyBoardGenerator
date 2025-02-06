@@ -1,5 +1,5 @@
 import {create} from "zustand";
-import {data} from "../constants";
+import {MAPS} from "../constants";
 
 export const useStore = create((set) => ({
     map: {
@@ -8,13 +8,14 @@ export const useStore = create((set) => ({
         description: "",
         boardView: "",
         boardIcon: "",
+        sound: "",
     },
     setMap: (map) => set({map}),
     generateMap: (prevMap = null) => {
-        if (data.length === 0) return;
+        if (MAPS.length === 0) return;
 
-        if (data.length === 1) {
-            const onlyItem = data[0];
+        if (MAPS.length === 1) {
+            const onlyItem = MAPS[0];
             set({
                 map: {
                     id: onlyItem.id,
@@ -22,6 +23,7 @@ export const useStore = create((set) => ({
                     description: onlyItem.description,
                     boardView: onlyItem.boardView,
                     boardIcon: onlyItem.boardIcon,
+                    sound: onlyItem.sound
                 }
             });
             return;
@@ -29,7 +31,7 @@ export const useStore = create((set) => ({
 
         let randomItem;
         do {
-            randomItem = data[Math.floor(Math.random() * data.length)];
+            randomItem = MAPS[Math.floor(Math.random() * MAPS.length)];
         } while (prevMap && randomItem.id === prevMap.id);
 
         set({
@@ -39,6 +41,7 @@ export const useStore = create((set) => ({
                 description: randomItem.description,
                 boardView: randomItem.boardView,
                 boardIcon: randomItem.boardIcon,
+                sound: randomItem.sound
             }
         });
     },
@@ -51,6 +54,7 @@ export const useStore = create((set) => ({
             description: "",
             boardView: "",
             boardIcon: "",
+            sound: "",
         })
     },
 }));

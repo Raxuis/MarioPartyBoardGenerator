@@ -5,7 +5,7 @@
     "slug": "random-map-generator",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/game-logo.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {

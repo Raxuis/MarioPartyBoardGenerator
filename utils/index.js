@@ -17,17 +17,31 @@ export const fadeOutSound = async (sound, duration = 1000) => {
     await sound.setVolumeAsync(0);
 };
 
+export const fadeInSound = async (sound, duration = 1000) => {
+    if (!sound) return;
+
+    const steps = 20;
+    const stepDuration = duration / steps;
+    let volumeStep = 1 / steps;
+
+    await sound.setVolumeAsync(0);
+    await sound.playAsync();
+
+    for (let i = 0; i <= steps; i++) {
+        const volume = i * volumeStep;
+        console.log(`Fading in: ${volume}`);
+        await sound.setVolumeAsync(volume);
+        await new Promise(resolve => setTimeout(resolve, stepDuration));
+    }
+
+    await sound.setVolumeAsync(0.5);
+};
+
+
 
 export const shuffleArray = (array) => {
     return [...array].sort(() => Math.random() - 0.5);
 };
-
-export const playMusic = async (sound) => {
-    if (!sound) return;
-
-    await sound.setVolumeAsync(0.5);
-    await sound.playAsync();
-}
 
 export const toggleMusic = async (sound, duration = 1000) => {
     if (!sound) return;

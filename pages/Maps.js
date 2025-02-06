@@ -1,5 +1,5 @@
 import {SafeAreaView, Text, View, StyleSheet} from "react-native";
-import {nintendoColor} from "../constants";
+import {NINTENDO_COLOR} from "../constants";
 import MapsDisplay from "../components/MapsDisplay";
 import * as Haptics from "expo-haptics";
 import CustomButton from "../components/CustomButton";
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
     },
     backButton: {
-        backgroundColor: nintendoColor,
+        backgroundColor: NINTENDO_COLOR,
         padding: 2,
         width: 50,
         alignItems: "center",
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     title: {
         fontFamily: "ShinGoPro-Bold",
         fontSize: 24,
-        color: nintendoColor,
+        color: NINTENDO_COLOR,
         flex: 1,
         textAlign: "center",
     },

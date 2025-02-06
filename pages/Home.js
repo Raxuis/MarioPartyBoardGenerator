@@ -78,7 +78,7 @@ export default function Home({toggleMapsMusic, generateRandomMap}) {
             <View style={[globalStyles.centeredContainer, globalStyles.fullSize]}>
                 <View style={styles.imageContainer}>
                     <Animated.Image
-                        source={require('../assets/icon.png')}
+                        source={require('../assets/game-logo.png')}
                         style={{
                             width: homeIconWidth,
                             height: homeIconHeight,

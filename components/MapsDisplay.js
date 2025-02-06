@@ -5,7 +5,7 @@ import Animated, {
     useSharedValue,
     withTiming,
 } from 'react-native-reanimated';
-import {data} from '../constants';
+import {MAPS} from '../constants';
 import {globalStyles} from "../styles/globalStyles";
 import {BlurView} from "expo-blur";
 
@@ -57,7 +57,7 @@ const MapsDisplay = () => {
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
         >
-            {data.map((item, index) => (
+            {MAPS.map((item, index) => (
                 <AnimatedCard
                     key={index}
                     item={item}

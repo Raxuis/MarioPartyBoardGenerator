@@ -1,13 +1,18 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, Text, View} from "react-native";
 import Animated, {useSharedValue, withTiming} from "react-native-reanimated";
 import CustomButton from "../components/CustomButton";
 import * as Haptics from "expo-haptics";
 import {useStore} from "../store/store";
 import {globalStyles} from "../styles/globalStyles";
+import {Audio} from "expo-av";
+import {fadeInSound} from "../utils";
 
 const RandomMap = () => {
     const {resetMap, map, generateMap} = useStore();
+
+
+    const [sound, setSound] = useState(null);
 
     const opacity = useSharedValue(0);
     const iconWidth = useSharedValue(0);
@@ -19,6 +24,31 @@ const RandomMap = () => {
         iconWidth.value = withTiming(180, {duration: 300});
         iconHeight.value = withTiming(180, {duration: 300});
     }, []);
+
+    useEffect(() => {
+        async function loadSound() {
+            if (!map.sound) return;
+
+            if (sound) {
+                await sound.stopAsync();
+                await sound.unloadAsync();
+            }
+
+            const {sound} = await Audio.Sound.createAsync(
+                map.sound,
+                {shouldPlay: false}
+            );
+            setSound(sound);
+            await fadeInSound(sound);
+        }
+
+        loadSound();
+
+        return () => {
+            sound?.unloadAsync();
+        };
+    }, [map]);
+
 
     return (
         <View style={globalStyles.container}>
@@ -119,7 +149,8 @@ const RandomMap = () => {
                                 opacity.value = withTiming(0, {duration: 200});
                                 infoTranslateX.value = withTiming(-100, {duration: 300});
 
-                                setTimeout(() => {
+                                setTimeout(async () => {
+                                    await sound.stopAsync();
                                     resetMap();
                                     generateMap(map);
 

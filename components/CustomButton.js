@@ -2,6 +2,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {globalStyles} from "../styles/globalStyles";
 import {useEffect, useState} from "react";
 import {Audio} from "expo-av";
+import {BUTTON_SOUNDS} from "../constants";
 
 const CustomButton = ({
                           children,
@@ -16,8 +17,8 @@ const CustomButton = ({
         const loadSound = async () => {
             const {sound} = await Audio.Sound.createAsync(
                 type === "forward"
-                    ? require('../assets/sounds/click-forward.mp3')
-                    : require('../assets/sounds/click-back.mp3'),
+                    ? BUTTON_SOUNDS.FORWARD
+                    : BUTTON_SOUNDS.BACKWARD,
                 {shouldPlay: false}
             );
             setSound(sound);
@@ -30,6 +31,7 @@ const CustomButton = ({
         };
     }, []);
 
+    // 👇 To fix issues when spamming the buttons, we need to stop the sound before playing it again
     const handlePress = async () => {
         if (sound) {
             await sound.stopAsync();
@@ -38,8 +40,8 @@ const CustomButton = ({
         } else {
             const {sound: newSound} = await Audio.Sound.createAsync(
                 type === "forward"
-                    ? require('../assets/sounds/click-forward.mp3')
-                    : require('../assets/sounds/click-back.mp3')
+                    ? BUTTON_SOUNDS.FORWARD
+                    : BUTTON_SOUNDS.BACKWARD,
             );
             setSound(newSound);
             await newSound.playAsync();

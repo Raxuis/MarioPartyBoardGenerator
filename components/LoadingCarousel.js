@@ -2,33 +2,33 @@ import React, {useState, useEffect, useRef} from 'react';
 import {View, Text, Image, Dimensions, Animated, StyleSheet} from 'react-native';
 import * as Haptics from 'expo-haptics';
 import {useStore} from '../store/store';
-import {CAROUSEL_DURATION, data} from '../constants';
+import {CAROUSEL_DURATION, MAPS} from '../constants';
 import {shuffleArray} from "../utils";
 
 const {width} = Dimensions.get('window');
 
 const LoadingCarousel = () => {
-    const [shuffledData, setShuffledData] = useState([]);
+    const [shuffledMaps, setShuffledMaps] = useState([]);
     const flatListRef = useRef(null);
     const currentIndexRef = useRef(0);
     const {map} = useStore();
 
     useEffect(() => {
         if (map.id !== 0) {
-            const dataWithoutMap = data.filter(item => item.id !== map.id);
+            const dataWithoutMap = MAPS.filter(item => item.id !== map.id);
             let shuffledWithoutMap = shuffleArray(dataWithoutMap);
             const finalData = [...shuffledWithoutMap, map];
-            setShuffledData(finalData);
+            setShuffledMaps(finalData);
         }
     }, [map]);
 
     useEffect(() => {
-        if (shuffledData.length === 0) return;
+        if (shuffledMaps.length === 0) return;
 
-        const intervalDuration = Math.floor(CAROUSEL_DURATION / shuffledData.length);
+        const intervalDuration = Math.floor(CAROUSEL_DURATION / shuffledMaps.length);
 
         const interval = setInterval(() => {
-            const nextIndex = currentIndexRef.current === shuffledData.length - 1
+            const nextIndex = currentIndexRef.current === shuffledMaps.length - 1
                 ? 0
                 : currentIndexRef.current + 1;
 
@@ -39,7 +39,7 @@ const LoadingCarousel = () => {
                 });
             }
 
-            if (nextIndex === shuffledData.length - 1) {
+            if (nextIndex === shuffledMaps.length - 1) {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
             } else {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -49,7 +49,7 @@ const LoadingCarousel = () => {
         }, intervalDuration);
 
         return () => clearInterval(interval);
-    }, [shuffledData]);
+    }, [shuffledMaps]);
 
     const renderItem = ({item}) => (
         <View style={styles.carouselItem}>
@@ -66,7 +66,7 @@ const LoadingCarousel = () => {
         <View style={styles.carouselContainer}>
             <Animated.FlatList
                 ref={flatListRef}
-                data={shuffledData}
+                data={shuffledMaps}
                 horizontal
                 pagingEnabled
                 scrollEnabled={false}
