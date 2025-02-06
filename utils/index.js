@@ -29,7 +29,6 @@ export const fadeInSound = async (sound, duration = 1000) => {
 
     for (let i = 0; i <= steps; i++) {
         const volume = i * volumeStep;
-        console.log(`Fading in: ${volume}`);
         await sound.setVolumeAsync(volume);
         await new Promise(resolve => setTimeout(resolve, stepDuration));
     }

@@ -133,8 +133,9 @@ const RandomMap = () => {
                                 alignItems: "center",
                                 justifyContent: "center",
                             }}
-                            onPress={() => {
+                            onPress={async () => {
                                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                                await sound.stopAsync();
                                 resetMap();
                             }}
                         >
