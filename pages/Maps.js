@@ -4,42 +4,45 @@ import MapsDisplay from "../components/MapsDisplay";
 import * as Haptics from "expo-haptics";
 import CustomButton from "../components/CustomButton";
 import {useStore} from "../store/store";
+import Animated, {useSharedValue, withTiming} from "react-native-reanimated";
 
 const Maps = ({toggleMapsMusic}) => {
     const {resetMap, setPage} = useStore();
 
-    return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.title}>
-                    Les 7 Cartes Disponibles
-                </Text>
-            </View>
-            <View style={styles.mapsWrapper}>
-                <View style={styles.mapsContainer}>
-                    <MapsDisplay/>
-                </View>
-            </View>
+    const opacity = useSharedValue(1);
 
-            <View style={styles.buttonWrapper}>
-                <CustomButton
-                    primary={false}
-                    style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                    type="back"
-                    onPress={async () => {
-                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                        await toggleMapsMusic(300);
-                        resetMap();
-                        setPage("home");
-                    }}
-                >
-                    Retour
-                </CustomButton>
-            </View>
+    const goBack = async () => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        opacity.value = withTiming(0, {duration: 300});
+        await toggleMapsMusic(100);
+        resetMap();
+        setPage("home");
+    }
+
+    return (
+        <SafeAreaView style={[styles.container]}>
+            <Animated.View style={[{opacity}]}>
+                <View style={styles.header}>
+                    <Text style={styles.title}>
+                        Les 7 Cartes Disponibles
+                    </Text>
+                </View>
+                <View style={styles.mapsWrapper}>
+                    <View style={styles.mapsContainer}>
+                        <MapsDisplay/>
+                    </View>
+                </View>
+
+                <View style={styles.buttonWrapper}>
+                    <CustomButton
+                        primary={false}
+                        type="back"
+                        onPress={goBack}
+                    >
+                        Retour
+                    </CustomButton>
+                </View>
+            </Animated.View>
         </SafeAreaView>
 
     );

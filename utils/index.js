@@ -47,8 +47,6 @@ export const toggleMusic = async (sound, duration = 1000) => {
 
     const status = await sound.getStatusAsync();
 
-    if (status.isLoading) return;
-
     if (status.isPlaying) {
         await fadeOutSound(sound, duration);
     } else {
