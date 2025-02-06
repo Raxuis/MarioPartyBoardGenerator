@@ -1,12 +1,6 @@
-# Random Map Generator
+# ⭐️ Random Map Generator ⭐️
 
 **Random Map Generator** is aimed to generate a random map on *Super Mario Party Jamboree*.
-
-This project utilizes the following technologies:
-
-- [React Native](https://reactnative.dev/)
-- [Expo](https://expo.dev/)
-- [Zustand](https://zustand-demo.pmnd.rs/)
 
 ---
 
