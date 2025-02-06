@@ -1,8 +1,7 @@
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {globalStyles} from "../styles/globalStyles";
-import {useEffect, useState} from "react";
-import {Audio} from "expo-av";
 import {BUTTON_SOUNDS} from "../constants";
+import useButtonSound from '../hooks/useButtonSound';
 
 const CustomButton = ({
                           children,
@@ -12,46 +11,15 @@ const CustomButton = ({
                           primary,
                           type
                       }) => {
-    const [sound, setSound] = useState(null);
-    useEffect(() => {
-        const loadSound = async () => {
-            const {sound} = await Audio.Sound.createAsync(
-                type === "forward"
-                    ? BUTTON_SOUNDS.FORWARD
-                    : BUTTON_SOUNDS.BACKWARD,
-                {shouldPlay: false}
-            );
-            setSound(sound);
-        };
+    const soundSource = type === "forward" ? BUTTON_SOUNDS.FORWARD : BUTTON_SOUNDS.BACKWARD;
+    const {playSound} = useButtonSound(soundSource);
 
-        loadSound();
-
-        return () => {
-            sound?.unloadAsync();
-        };
-    }, []);
-
-    // 👇 To fix issues when spamming the buttons, we need to stop the sound before playing it again
     const handlePress = async () => {
-        if (sound) {
-            await sound.stopAsync();
-            await sound.setPositionAsync(0);
-            await sound.playAsync();
-        } else {
-            const {sound: newSound} = await Audio.Sound.createAsync(
-                type === "forward"
-                    ? BUTTON_SOUNDS.FORWARD
-                    : BUTTON_SOUNDS.BACKWARD,
-            );
-            setSound(newSound);
-            await newSound.playAsync();
-        }
-
+        await playSound();
         if (onPress) {
             onPress();
         }
     };
-
 
     return (
         <TouchableOpacity
@@ -65,7 +33,6 @@ const CustomButton = ({
         </TouchableOpacity>
     );
 };
-
 
 const styles = StyleSheet.create({
     content: {

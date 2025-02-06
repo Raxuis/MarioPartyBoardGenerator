@@ -147,9 +147,10 @@ export default function Home({toggleMapsMusic, generateRandomMap}) {
                     type={"forward"}
                     onPress={async () => {
                         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-                        //👇 add a duration of 300ms instead of 1000ms to avoid long waiting time
-                        await toggleMapsMusic(300);
-                        setPage("maps");
+                        await toggleMapsMusic();
+                        setTimeout(() => {
+                            setPage("maps");
+                        }, 300);
                     }}
                 >
                     Voir toutes les cartes

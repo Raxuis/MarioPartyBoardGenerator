@@ -6,12 +6,11 @@ import Animated, {
     useSharedValue,
     withRepeat,
     withTiming,
-    withSequence
 } from "react-native-reanimated";
 import {globalStyles} from "../styles/globalStyles";
 import { CAROUSEL_DURATION } from '../constants';
 
-const RandomMapGeneration = ({onAnimationComplete}) => {
+const RandomMapGeneration = () => {
     const shuffleTranslateY = useSharedValue(0);
     const opacity = useSharedValue(1);
 
