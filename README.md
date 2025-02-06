@@ -24,6 +24,8 @@ In this project, you can:
 - Generate a new map.
 - See the 7 different maps with their names.
 
+If you want to see screenshots of the project, you can check the `demo` folder.
+
 ---
 
 ## Architecture
