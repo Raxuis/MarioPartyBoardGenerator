@@ -1,6 +1,6 @@
 import Animated, {Easing, useSharedValue, withRepeat, withTiming} from "react-native-reanimated";
 import {Platform, SafeAreaView, StatusBar, View, StyleSheet, Dimensions, TouchableOpacity} from "react-native";
-import CustomButton from "../components/CustomButton";
+import MarioPartyButton from "../components/MarioPartyButton";
 import * as Haptics from "expo-haptics";
 import {usePageStore} from "../store/store";
 import {globalStyles} from "../styles/globalStyles";
@@ -109,7 +109,7 @@ export default function Home({toggleMapsMusic, generateRandomMap}) {
                         }}
                     />
                 </View>
-                <CustomButton
+                <MarioPartyButton
                     triangle={true}
                     primary={true}
                     type={"forward"}
@@ -119,8 +119,8 @@ export default function Home({toggleMapsMusic, generateRandomMap}) {
                     }}
                 >
                     Générer une carte
-                </CustomButton>
-                <CustomButton
+                </MarioPartyButton>
+                <MarioPartyButton
                     style={{marginTop: 15}}
                     triangle={true}
                     type={"forward"}
@@ -133,7 +133,7 @@ export default function Home({toggleMapsMusic, generateRandomMap}) {
                     }}
                 >
                     Voir toutes les cartes
-                </CustomButton>
+                </MarioPartyButton>
             </View>
         </SafeAreaView>
     );

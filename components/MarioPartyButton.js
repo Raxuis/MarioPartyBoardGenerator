@@ -3,7 +3,7 @@ import {globalStyles} from "../styles/globalStyles";
 import {BUTTON_SOUNDS} from "../constants";
 import useButtonSound from '../hooks/useButtonSound';
 
-const CustomButton = ({
+const MarioPartyButton = ({
                           children,
                           style,
                           textStyle,
@@ -41,4 +41,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CustomButton;
+export default MarioPartyButton;

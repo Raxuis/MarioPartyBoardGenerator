@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Image, Text, View} from "react-native";
 import Animated, {useSharedValue, withTiming} from "react-native-reanimated";
-import CustomButton from "../components/CustomButton";
+import MarioPartyButton from "../components/MarioPartyButton";
 import * as Haptics from "expo-haptics";
 import {useMapStore} from "../store/store";
 import {globalStyles} from "../styles/globalStyles";
@@ -119,7 +119,7 @@ const RandomMap = () => {
                         justifyContent: "center",
                         gap: 20,
                     }}>
-                        <CustomButton
+                        <MarioPartyButton
                             primary={false}
                             style={{
                                 display: "flex",
@@ -134,8 +134,8 @@ const RandomMap = () => {
                             }}
                         >
                             Retour
-                        </CustomButton>
-                        <CustomButton
+                        </MarioPartyButton>
+                        <MarioPartyButton
                             triangle={true}
                             primary={true}
                             type="forward"
@@ -165,7 +165,7 @@ const RandomMap = () => {
 
                         >
                             Relancer
-                        </CustomButton>
+                        </MarioPartyButton>
 
                     </View>
                 </View>
