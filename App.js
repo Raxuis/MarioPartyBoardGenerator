@@ -1,5 +1,5 @@
 import {View} from 'react-native';
-import {useStore} from "./store/store";
+import {useMapStore, usePageStore} from "./store/store";
 import {useFonts} from "expo-font";
 import {useEffect, useState} from "react";
 import * as SplashScreen from "expo-splash-screen/build/index";
@@ -14,15 +14,17 @@ import useBackgroundSound from './hooks/useBackgroundSound';
 export default function App() {
     const {
         map,
-        generateMap,
+        generateMap
+    } = useMapStore();
+
+    const {
         page
-    } = useStore();
+    } = usePageStore();
 
     const [randomLoading, setRandomLoading] = useState(false);
 
     const {
         sound: randomSound,
-        toggleSoundMusic: toggleRandomSound
     } = useBackgroundSound(
         require('./assets/sounds/random.mp3'),
         false,

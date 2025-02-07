@@ -3,12 +3,13 @@ import {NINTENDO_COLOR} from "../constants";
 import MapsDisplay from "../components/MapsDisplay";
 import * as Haptics from "expo-haptics";
 import CustomButton from "../components/CustomButton";
-import {useStore} from "../store/store";
+import {usePageStore, useMapStore} from "../store/store";
 import Animated, {useSharedValue, withTiming} from "react-native-reanimated";
 import {useEffect} from "react";
 
 const Maps = ({toggleMapsMusic}) => {
-    const {resetMap, setPage} = useStore();
+    const {resetMap} = useMapStore();
+    const {setPage} = usePageStore();
     const opacity = useSharedValue(1);
 
     const goBack = async () => {

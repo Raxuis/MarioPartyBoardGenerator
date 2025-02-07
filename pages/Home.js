@@ -2,15 +2,13 @@ import Animated, {Easing, useSharedValue, withRepeat, withTiming} from "react-na
 import {Platform, SafeAreaView, StatusBar, View, StyleSheet, Dimensions, TouchableOpacity} from "react-native";
 import CustomButton from "../components/CustomButton";
 import * as Haptics from "expo-haptics";
-import {useStore} from "../store/store";
+import {usePageStore} from "../store/store";
 import {globalStyles} from "../styles/globalStyles";
-import {useEffect, useState} from "react";
-import {Audio} from "expo-av";
+import {useEffect} from "react";
 import useButtonSound from "../hooks/useButtonSound";
 
 export default function Home({toggleMapsMusic, generateRandomMap}) {
-    const {setPage} = useStore();
-    const [sound, setSound] = useState(null);
+    const {setPage} = usePageStore();
 
     const windowWidth = Dimensions.get('window').width;
 
@@ -61,7 +59,7 @@ export default function Home({toggleMapsMusic, generateRandomMap}) {
         }
     });
 
-      const {
+    const {
         playSound
     } = useButtonSound(
         require('../assets/sounds/easter-egg.mp3')

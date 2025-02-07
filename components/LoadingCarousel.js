@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {View, Text, Image, Dimensions, Animated, StyleSheet} from 'react-native';
 import * as Haptics from 'expo-haptics';
-import {useStore} from '../store/store';
+import {useMapStore} from '../store/store';
 import {CAROUSEL_DURATION, MAPS} from '../constants';
 import {shuffleArray} from "../utils";
 
@@ -11,7 +11,7 @@ const LoadingCarousel = () => {
     const [shuffledMaps, setShuffledMaps] = useState([]);
     const flatListRef = useRef(null);
     const currentIndexRef = useRef(0);
-    const {map} = useStore();
+    const {map} = useMapStore();
 
     useEffect(() => {
         if (map.id !== 0) {

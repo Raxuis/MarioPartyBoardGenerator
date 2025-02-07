@@ -12,7 +12,7 @@ const useBackgroundSound = (soundUri, shouldPlay = false, isLooping = false, opt
         }
 
         try {
-            const { sound } = await Audio.Sound.createAsync(
+            const {sound} = await Audio.Sound.createAsync(
                 soundUri,
                 {
                     shouldPlay: shouldPlay,

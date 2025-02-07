@@ -3,12 +3,12 @@ import {Image, Text, View} from "react-native";
 import Animated, {useSharedValue, withTiming} from "react-native-reanimated";
 import CustomButton from "../components/CustomButton";
 import * as Haptics from "expo-haptics";
-import {useStore} from "../store/store";
+import {useMapStore} from "../store/store";
 import {globalStyles} from "../styles/globalStyles";
 import useBackgroundSound from '../hooks/useBackgroundSound';
 
 const RandomMap = () => {
-    const {resetMap, map, generateMap} = useStore();
+    const {resetMap, map, generateMap} = useMapStore();
 
     const {
         toggleSoundMusic: toggleMapSound,
@@ -39,6 +39,7 @@ const RandomMap = () => {
                 await toggleMapSound();
             }
         }
+
         init();
     }, [map.sound]);
 

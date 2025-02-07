@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Audio } from 'expo-av';
+import {useState, useEffect, useCallback} from 'react';
+import {Audio} from 'expo-av';
 
 const useButtonSound = (soundSource) => {
     const [sound, setSound] = useState(null);
@@ -9,9 +9,9 @@ const useButtonSound = (soundSource) => {
     useEffect(() => {
         const loadSound = async () => {
             try {
-                const { sound: newSound } = await Audio.Sound.createAsync(
+                const {sound: newSound} = await Audio.Sound.createAsync(
                     soundSource,
-                    { shouldPlay: false }
+                    {shouldPlay: false}
                 );
 
                 setSound(newSound);
@@ -42,7 +42,7 @@ const useButtonSound = (soundSource) => {
             }
         } else {
             try {
-                const { sound: newSound } = await Audio.Sound.createAsync(soundSource);
+                const {sound: newSound} = await Audio.Sound.createAsync(soundSource);
                 setSound(newSound);
                 await newSound.playAsync();
             } catch (err) {
