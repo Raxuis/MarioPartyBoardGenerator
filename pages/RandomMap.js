@@ -1,18 +1,25 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Image, Text, View} from "react-native";
 import Animated, {useSharedValue, withTiming} from "react-native-reanimated";
 import CustomButton from "../components/CustomButton";
 import * as Haptics from "expo-haptics";
 import {useStore} from "../store/store";
 import {globalStyles} from "../styles/globalStyles";
-import {Audio} from "expo-av";
-import {fadeInSound} from "../utils";
+import useBackgroundSound from '../hooks/useBackgroundSound';
 
 const RandomMap = () => {
     const {resetMap, map, generateMap} = useStore();
 
-
-    const [sound, setSound] = useState(null);
+    const {
+        toggleSoundMusic: toggleMapSound,
+        stopSound,
+        isLoaded,
+        loadSound
+    } = useBackgroundSound(
+        map.sound,
+        true,
+        false
+    );
 
     const opacity = useSharedValue(0);
     const iconWidth = useSharedValue(0);
@@ -26,28 +33,14 @@ const RandomMap = () => {
     }, []);
 
     useEffect(() => {
-        async function loadSound() {
-            if (!map.sound) return;
-
-            if (sound) {
-                await sound.stopAsync();
-                await sound.unloadAsync();
+        async function init() {
+            await stopSound();
+            if (isLoaded && map.sound) {
+                await toggleMapSound();
             }
-
-            const {sound} = await Audio.Sound.createAsync(
-                map.sound,
-                {shouldPlay: false}
-            );
-            setSound(sound);
-            await fadeInSound(sound);
         }
-
-        loadSound();
-
-        return () => {
-            sound?.unloadAsync();
-        };
-    }, [map]);
+        init();
+    }, [map.sound]);
 
 
     return (
@@ -135,7 +128,7 @@ const RandomMap = () => {
                             }}
                             onPress={async () => {
                                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                                await sound.stopAsync();
+                                await stopSound();
                                 resetMap();
                             }}
                         >
@@ -145,13 +138,14 @@ const RandomMap = () => {
                             triangle={true}
                             primary={true}
                             type="forward"
-                            onPress={() => {
-                                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+                            onPress={async () => {
+                                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
                                 opacity.value = withTiming(0, {duration: 200});
                                 infoTranslateX.value = withTiming(-100, {duration: 300});
 
+                                await stopSound();
+
                                 setTimeout(async () => {
-                                    await sound.stopAsync();
                                     resetMap();
                                     generateMap(map);
 
@@ -160,11 +154,18 @@ const RandomMap = () => {
 
                                     infoTranslateX.value = withTiming(0, {duration: 300});
                                     opacity.value = withTiming(1, {duration: 200});
+
+                                    if (map.sound) {
+                                        await loadSound();
+                                        await toggleMapSound();
+                                    }
                                 }, 300);
                             }}
+
                         >
                             Relancer
                         </CustomButton>
+
                     </View>
                 </View>
             </View>

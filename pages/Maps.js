@@ -5,19 +5,34 @@ import * as Haptics from "expo-haptics";
 import CustomButton from "../components/CustomButton";
 import {useStore} from "../store/store";
 import Animated, {useSharedValue, withTiming} from "react-native-reanimated";
+import {useEffect} from "react";
 
 const Maps = ({toggleMapsMusic}) => {
     const {resetMap, setPage} = useStore();
-
     const opacity = useSharedValue(1);
 
     const goBack = async () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         opacity.value = withTiming(0, {duration: 300});
-        await toggleMapsMusic(100);
-        resetMap();
-        setPage("home");
+
+        try {
+            await toggleMapsMusic();
+            setTimeout(() => {
+                resetMap();
+                setPage("home");
+            }, 300);
+        } catch (error) {
+            console.error("Error in goBack:", error);
+            resetMap();
+            setPage("home");
+        }
     }
+
+    useEffect(() => {
+        return () => {
+            opacity.value = 1;
+        };
+    }, []);
 
     return (
         <SafeAreaView style={[styles.container]}>

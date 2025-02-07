@@ -3,14 +3,13 @@ import {useStore} from "./store/store";
 import {useFonts} from "expo-font";
 import {useEffect, useState} from "react";
 import * as SplashScreen from "expo-splash-screen/build/index";
-import {Audio} from "expo-av";
 import Home from "./pages/Home";
 import RandomMap from "./pages/RandomMap";
 import RandomMapGeneration from "./pages/RandomMapGeneration";
 import NotFound from "./pages/NotFound";
 import {globalStyles} from "./styles/globalStyles";
 import Maps from "./pages/Maps";
-import {toggleMusic} from "./utils";
+import useBackgroundSound from './hooks/useBackgroundSound';
 
 export default function App() {
     const {
@@ -19,9 +18,25 @@ export default function App() {
         page
     } = useStore();
 
-    const [randomSound, setRandomSound] = useState(null);
-    const [mapsSound, setMapsSound] = useState(null);
     const [randomLoading, setRandomLoading] = useState(false);
+
+    const {
+        sound: randomSound,
+        toggleSoundMusic: toggleRandomSound
+    } = useBackgroundSound(
+        require('./assets/sounds/random.mp3'),
+        false,
+        false
+    );
+
+    const {
+        sound: mapsSound,
+        toggleSoundMusic: toggleMapsMusic
+    } = useBackgroundSound(
+        require('./assets/sounds/maps.mp3'),
+        false,
+        true
+    );
 
     const [loaded, error] = useFonts({
         'Super-Mario': require('./assets/fonts/SuperMario256.ttf'),
@@ -34,52 +49,35 @@ export default function App() {
         'ShinGoPro-Heavy': require('./assets/fonts/AOTFShinGoProHeavy.otf'),
     });
 
-    useEffect(() => {
-        async function loadRandomSound() {
-            const {sound} = await Audio.Sound.createAsync(
-                require('./assets/sounds/random.mp3'),
-                {shouldPlay: false, isLooping: true}
-            );
-            setRandomSound(sound);
-        }
-
-        async function loadMapsSound() {
-            const {sound} = await Audio.Sound.createAsync(
-                require('./assets/sounds/maps.mp3'),
-                {shouldPlay: false, isLooping: true}
-            );
-            setMapsSound(sound);
-        }
-
-        loadRandomSound();
-        loadMapsSound();
-
-        return () => {
-            randomSound && randomSound.unloadAsync();
-            mapsSound && mapsSound.unloadAsync();
-        }
-    }, []);
-
     const generateRandomMap = async () => {
         await toggleRandomLoading();
     };
 
     const toggleRandomLoading = async () => {
         setRandomLoading(true);
-        await toggleMusic(randomSound);
+
+        if (mapsSound) {
+            await mapsSound.stopAsync();
+            await mapsSound.setPositionAsync(0);
+        }
+
+        if (randomSound) {
+            await randomSound.stopAsync();
+            await randomSound.setPositionAsync(0);
+            await randomSound.setVolumeAsync(0.5);
+            await randomSound.playAsync();
+        }
 
         await generateMap(map);
 
-        setTimeout(() => {
+        setTimeout(async () => {
             setRandomLoading(false);
-            toggleMusic(randomSound);
+            if (randomSound) {
+                await randomSound.stopAsync();
+                await randomSound.setPositionAsync(0);
+            }
         }, 5000);
     };
-
-    const toggleMapsMusic = async (duration = 1000) => {
-        await toggleMusic(mapsSound, duration);
-    }
-
 
     useEffect(() => {
         if (loaded || error) {

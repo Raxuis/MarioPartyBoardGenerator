@@ -6,6 +6,7 @@ import {useStore} from "../store/store";
 import {globalStyles} from "../styles/globalStyles";
 import {useEffect, useState} from "react";
 import {Audio} from "expo-av";
+import useButtonSound from "../hooks/useButtonSound";
 
 export default function Home({toggleMapsMusic, generateRandomMap}) {
     const {setPage} = useStore();
@@ -60,34 +61,14 @@ export default function Home({toggleMapsMusic, generateRandomMap}) {
         }
     });
 
-    useEffect(() => {
-        const loadSound = async () => {
-            const {sound} = await Audio.Sound.createAsync(
-                require('../assets/sounds/easter-egg.mp3'),
-                {shouldPlay: false}
-            );
-            setSound(sound);
-        };
-
-        loadSound();
-
-        return () => {
-            sound?.unloadAsync();
-        };
-    }, []);
+      const {
+        playSound
+    } = useButtonSound(
+        require('../assets/sounds/easter-egg.mp3')
+    );
 
     const handlePress = async () => {
-        if (sound) {
-            await sound.stopAsync();
-            await sound.setPositionAsync(0);
-            await sound.playAsync();
-        } else {
-            const {sound: newSound} = await Audio.Sound.createAsync(
-                require('../assets/sounds/easter-egg.mp3'),
-            );
-            setSound(newSound);
-            await newSound.playAsync();
-        }
+        await playSound();
     }
 
     return (
@@ -147,9 +128,10 @@ export default function Home({toggleMapsMusic, generateRandomMap}) {
                     type={"forward"}
                     onPress={async () => {
                         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-                        //👇 add a duration of 300ms instead of 1000ms to avoid long waiting time
-                        await toggleMapsMusic(300);
-                        setPage("maps");
+                        await toggleMapsMusic();
+                        setTimeout(() => {
+                            setPage("maps");
+                        }, 300);
                     }}
                 >
                     Voir toutes les cartes
