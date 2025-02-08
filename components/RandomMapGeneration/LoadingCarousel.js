@@ -1,9 +1,9 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {View, Text, Image, Dimensions, Animated, StyleSheet} from 'react-native';
 import * as Haptics from 'expo-haptics';
-import {useMapStore} from '../store/store';
-import {CAROUSEL_DURATION, MAPS} from '../constants';
-import {shuffleArray} from "../utils";
+import {useMapStore} from '../../store/store';
+import {CAROUSEL_DURATION, MAPS} from '../../constants';
+import {shuffleArray} from "../../utils";
 
 const {width} = Dimensions.get('window');
 

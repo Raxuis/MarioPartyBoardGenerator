@@ -1,8 +1,8 @@
 import {SafeAreaView, Text, View, StyleSheet} from "react-native";
 import {NINTENDO_COLOR} from "../constants";
-import MapsDisplay from "../components/MapsDisplay";
+import MapsDisplay from "../components/Maps/MapsDisplay";
 import * as Haptics from "expo-haptics";
-import MarioPartyButton from "../components/MarioPartyButton";
+import MarioPartyButton from "../components/ui/MarioPartyButton";
 import {usePageStore, useMapStore} from "../store/store";
 import Animated, {useSharedValue, withTiming} from "react-native-reanimated";
 import {useEffect} from "react";
@@ -13,7 +13,7 @@ const Maps = ({toggleMapsMusic}) => {
     const opacity = useSharedValue(1);
 
     const goBack = async () => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         opacity.value = withTiming(0, {duration: 300});
 
         try {

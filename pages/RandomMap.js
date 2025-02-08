@@ -1,12 +1,12 @@
 import React, {useEffect} from 'react';
-import {Image, Text, View} from "react-native";
-import Animated, {useSharedValue, withTiming} from "react-native-reanimated";
-import MarioPartyButton from "../components/MarioPartyButton";
+import {Image, View} from "react-native";
+import {useSharedValue, withTiming} from "react-native-reanimated";
+import MarioPartyButton from "../components/ui/MarioPartyButton";
 import * as Haptics from "expo-haptics";
 import {useMapStore} from "../store/store";
 import {globalStyles} from "../styles/globalStyles";
 import useBackgroundSound from '../hooks/useBackgroundSound';
-import RandomMapContainer from "../components/RandomMapContainer";
+import RandomMapContainer from "../components/RandomMap/RandomMapContainer";
 
 const RandomMap = () => {
     const {resetMap, map, generateMap} = useMapStore();

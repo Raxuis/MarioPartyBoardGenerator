@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react';
 import {Text, View} from "react-native";
-import {globalStyles} from "../styles/globalStyles";
+import {globalStyles} from "../../styles/globalStyles";
 import Animated, {useSharedValue, withTiming} from "react-native-reanimated";
-import {useMapStore} from "../store/store";
+import {useMapStore} from "../../store/store";
 
 const RandomMapContainer = ({infoTranslateX, opacity}) => {
     const {map} = useMapStore();

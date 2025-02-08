@@ -14,9 +14,6 @@ const Star = () => {
 
     const windowWidth = Dimensions.get('window').width;
 
-    const homeIconWidth = useSharedValue(180);
-    const homeIconHeight = useSharedValue(180);
-
     const starTranslateX = useSharedValue(0);
     const starTranslateY = useSharedValue(0);
     const starScale = useSharedValue(1);

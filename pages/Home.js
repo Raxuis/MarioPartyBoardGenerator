@@ -1,6 +1,5 @@
-import Animated, {useSharedValue, withRepeat, withTiming} from "react-native-reanimated";
-import {SafeAreaView, View, StyleSheet} from "react-native";
-import MarioPartyButton from "../components/MarioPartyButton";
+import {SafeAreaView, View} from "react-native";
+import MarioPartyButton from "../components/ui/MarioPartyButton";
 import * as Haptics from "expo-haptics";
 import {usePageStore} from "../store/store";
 import {globalStyles} from "../styles/globalStyles";
