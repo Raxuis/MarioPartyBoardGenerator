@@ -44,7 +44,10 @@ Here is the project structure:
     ├── components                  # Every component of the project
     │   └── ...                     
     ├── store                       # Zustand store
-    │   └── ...                     
+    │   └── ...
+    ├── hooks                       # Custom hooks
+    │   ├── useButtonSound.js       # Button sound hook
+    │   └── useBackgroundSound.js   # Background sound hook
     ├── App.js                      # Main component
     ├── utils.js                    # Utility functions
     │   └── index.js                # Main utility functions
@@ -106,7 +109,7 @@ To get started with the project, follow these steps:
    ```bash
    npm install 
    ```
-    or If not working :
+   or If not working :
     ```bash
      npm install --force
     ```
