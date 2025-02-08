@@ -1,11 +1,13 @@
 {
   "expo": {
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "name": "random-map-generator",
     "slug": "random-map-generator",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/game-logo.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
