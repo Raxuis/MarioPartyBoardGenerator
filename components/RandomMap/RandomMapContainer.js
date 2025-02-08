@@ -23,15 +23,15 @@ const RandomMapContainer = ({infoTranslateX, opacity}) => {
         iconHeight.value = withTiming(180, {duration: 300});
 
         textScale.value = withSequence(
-            withSpring(1.2, {
-                mass: 1,
-                damping: 2,
-                stiffness: 100,
+            withSpring(1.1, {
+                mass: 0.8,
+                damping: 6,
+                stiffness: 150,
             }),
-            withSpring(1, {damping: 4, stiffness: 100})
+            withSpring(1, {damping: 5, stiffness: 150})
         );
 
-        textOpacity.value = withTiming(1, {duration: 500});
+        textOpacity.value = withTiming(1, {duration: 300});
     }, []);
 
     const animatedTextStyle = useAnimatedStyle(() => ({
