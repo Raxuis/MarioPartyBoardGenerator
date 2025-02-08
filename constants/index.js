@@ -59,7 +59,7 @@ export const MAPS = [
     }
 ];
 
-
+// Could be used for a future feature
 export const GAME_COLORS = {
     'Super Mario Party Jamboree': '#FF5733',
     'Mario Party Superstars': '#3498db',

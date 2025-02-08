@@ -1,12 +1,7 @@
 import React, {useEffect} from 'react';
-import {Text, Image, ScrollView, View, StyleSheet, Dimensions} from 'react-native';
-import Animated, {
-    useAnimatedStyle,
-    useSharedValue,
-    withTiming,
-} from 'react-native-reanimated';
-import {MAPS} from '../constants';
-import {globalStyles} from "../styles/globalStyles";
+import Animated, {useAnimatedStyle, useSharedValue, withTiming} from "react-native-reanimated";
+import {Image, Text, View, StyleSheet, Dimensions} from "react-native";
+import {globalStyles} from "../../styles/globalStyles";
 import {BlurView} from "expo-blur";
 
 const {width} = Dimensions.get('window');
@@ -51,26 +46,7 @@ const AnimatedCard = ({item}) => {
     );
 };
 
-const MapsDisplay = () => {
-    return (
-        <ScrollView
-            contentContainerStyle={styles.scrollContent}
-            showsVerticalScrollIndicator={false}
-        >
-            {MAPS.map((item, index) => (
-                <AnimatedCard
-                    key={index}
-                    item={item}
-                />
-            ))}
-        </ScrollView>
-    );
-};
-
 const styles = StyleSheet.create({
-    scrollContent: {
-        paddingVertical: 20,
-    },
     card: {
         width: width - 40,
         borderRadius: 20,
@@ -114,4 +90,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default MapsDisplay;
+export default AnimatedCard;

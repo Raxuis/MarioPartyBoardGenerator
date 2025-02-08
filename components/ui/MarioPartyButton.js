@@ -1,7 +1,7 @@
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {globalStyles} from "../styles/globalStyles";
-import {BUTTON_SOUNDS} from "../constants";
-import useButtonSound from '../hooks/useButtonSound';
+import {globalStyles} from "../../styles/globalStyles";
+import {BUTTON_SOUNDS} from "../../constants";
+import useButtonSound from '../../hooks/useButtonSound';
 
 const MarioPartyButton = ({
                           children,

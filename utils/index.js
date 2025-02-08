@@ -1,3 +1,22 @@
+/**
+ * @param {array} array
+ * @returns {array}
+ * @description Shuffle the given array.
+ */
+export const shuffleArray = (array) => {
+    return [...array].sort(() => Math.random() - 0.5);
+};
+
+
+/**
+ * The following functions could be used.
+ *
+ * These functions were used at the beginning of the project and I decided to leave them in.
+ *
+ * First, the fadeOutSound function will fade out the sound over a specified duration.
+ * Second, the fadeInSound function will fade in the sound over a specified duration.
+ * Finally, the toggleMusic function will toggle the music on and off.
+ */
 export const fadeOutSound = async (sound, duration = 1000) => {
     if (!sound) return;
 
@@ -34,12 +53,6 @@ export const fadeInSound = async (sound, duration = 1000) => {
     }
 
     await sound.setVolumeAsync(0.5);
-};
-
-
-
-export const shuffleArray = (array) => {
-    return [...array].sort(() => Math.random() - 0.5);
 };
 
 export const toggleMusic = async (sound, duration = 1000) => {

@@ -1,11 +1,12 @@
 import React, {useEffect} from 'react';
-import {Image, Text, View} from "react-native";
-import Animated, {useSharedValue, withTiming} from "react-native-reanimated";
-import MarioPartyButton from "../components/MarioPartyButton";
+import {Image, View} from "react-native";
+import {useSharedValue, withTiming} from "react-native-reanimated";
+import MarioPartyButton from "../components/ui/MarioPartyButton";
 import * as Haptics from "expo-haptics";
 import {useMapStore} from "../store/store";
 import {globalStyles} from "../styles/globalStyles";
 import useBackgroundSound from '../hooks/useBackgroundSound';
+import RandomMapContainer from "../components/RandomMap/RandomMapContainer";
 
 const RandomMap = () => {
     const {resetMap, map, generateMap} = useMapStore();
@@ -22,14 +23,10 @@ const RandomMap = () => {
     );
 
     const opacity = useSharedValue(0);
-    const iconWidth = useSharedValue(0);
-    const iconHeight = useSharedValue(0);
     const infoTranslateX = useSharedValue(0);
 
     useEffect(() => {
         opacity.value = withTiming(1, {duration: 200});
-        iconWidth.value = withTiming(180, {duration: 300});
-        iconHeight.value = withTiming(180, {duration: 300});
     }, []);
 
     useEffect(() => {
@@ -50,21 +47,11 @@ const RandomMap = () => {
                 map.boardView ? (
                     <Image
                         source={map.boardView}
-                        style={[globalStyles.fullSize, {
-                            position: "absolute",
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
+                        style={[globalStyles.fullSize, globalStyles.Inset0Element, {
                             resizeMode: "cover",
                         }]}
                     />) : (
-                    <View style={[globalStyles.fullSize, {
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
+                    <View style={[globalStyles.fullSize, globalStyles.Inset0Element, {
                         backgroundColor: "white",
                     }]}/>
                 )
@@ -78,40 +65,12 @@ const RandomMap = () => {
                     backgroundColor: "rgba(0, 0, 0, 0.8)",
                 }]}>
                 <View>
-                    <View style={[globalStyles.centeredContainer, {
-                        padding: 20,
-                    }]}>
-                        <Animated.Image
-                            source={map.boardIcon}
-                            style={{
-                                width: iconWidth,
-                                height: iconHeight,
-                                opacity: opacity,
-                                resizeMode: 'contain',
-                                transform: [{translateX: infoTranslateX}]
-                            }}
-                        />
-                        <Text style={{
-                            fontFamily: "ShinGoPro-Bold",
-                            fontSize: 24,
-                            textAlign: "center",
-                            color: "white",
-                            marginTop: 20,
-                        }}>
-                            {map.name}
-                        </Text>
-                        <Text style={{
-                            fontFamily: "ShinGoPro",
-                            fontSize: 14,
-                            textAlign: "center",
-                            paddingTop: 10,
-                            opacity: 0.7,
-                            color: "white",
-                            maxWidth: 300,
-                        }}>
-                            {map.description}
-                        </Text>
-                    </View>
+
+                    <RandomMapContainer
+                        infoTranslateX={infoTranslateX}
+                        opacity={opacity}
+                    />
+
                     <View style={{
                         display: "flex",
                         flexDirection: "row",
@@ -166,7 +125,6 @@ const RandomMap = () => {
                         >
                             Relancer
                         </MarioPartyButton>
-
                     </View>
                 </View>
             </View>

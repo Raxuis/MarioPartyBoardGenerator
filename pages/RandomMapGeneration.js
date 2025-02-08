@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import LoadingCarousel from "../components/LoadingCarousel";
+import LoadingCarousel from "../components/RandomMapGeneration/LoadingCarousel";
 import Animated, {
     Easing,
     useAnimatedStyle,
