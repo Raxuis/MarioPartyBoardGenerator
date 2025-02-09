@@ -87,7 +87,7 @@ Used versions in this project :
 - **npm**: v10.2.4
 - **Next.js**: v0.76.6
 - **TailwindCSS**: v4
-- **Expo**: ~52.0.28
+- **Expo**: v52.0.28
 
 ---
 
@@ -114,10 +114,18 @@ To get started with the project, follow these steps:
      npm install --force
     ```
 
-4. Run the development server:
+4. Run the server when on same network:
    ```bash
    npm run start
    ```
+   or If **not on same network** :
+    ```bash
+     npx expo start --tunnel
+    ```
+   or :
+    ```bash
+     npm run tunnel
+    ```
 
 5. Open your browser or emulator to view the application.
 
