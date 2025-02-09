@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 import {globalStyles} from "./styles/globalStyles";
 import Maps from "./pages/Maps";
 import useBackgroundSound from './hooks/useBackgroundSound';
+import {CAROUSEL_DURATION} from "./constants";
 
 export default function App() {
     const {
@@ -78,7 +79,7 @@ export default function App() {
                 await randomSound.stopAsync();
                 await randomSound.setPositionAsync(0);
             }
-        }, 5000);
+        }, CAROUSEL_DURATION);
     };
 
     useEffect(() => {
