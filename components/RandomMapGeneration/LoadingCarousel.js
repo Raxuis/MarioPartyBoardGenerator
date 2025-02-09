@@ -25,6 +25,7 @@ const LoadingCarousel = () => {
     useEffect(() => {
         if (shuffledMaps.length === 0) return;
 
+        // 👇Duration of each interval for carousel to move to next item
         const intervalDuration = Math.floor(CAROUSEL_DURATION / shuffledMaps.length);
 
         const interval = setInterval(() => {
@@ -39,6 +40,7 @@ const LoadingCarousel = () => {
                 });
             }
 
+            // 👇Haptic feedback light for all items except the last one which is heavy
             if (nextIndex === shuffledMaps.length - 1) {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
             } else {
