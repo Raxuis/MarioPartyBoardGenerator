@@ -25,6 +25,7 @@ In this project, you can:
 - See the 7 different maps with their names.
 
 If you want to see screenshots of the project, you can check the `demo` folder.
+PS: Try to find the hidden easter egg in the project 🥚.
 
 ---
 
