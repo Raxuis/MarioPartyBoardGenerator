@@ -1,6 +1,6 @@
-# ⭐️ Random Map Generator ⭐️
+# ⭐️ Random Board Generator ⭐️
 
-**Random Map Generator** is aimed to generate a random map on *Super Mario Party Jamboree*.
+**Random Board Generator** is aimed to generate a random map on *Super Mario Party Jamboree*.
 
 ---
 
@@ -19,13 +19,13 @@
 
 In this project, you can:
 
-- Generate a random map for *Super Mario Party Jamboree*.
-- View the generated map.
+- Generate a random board for *Super Mario Party Jamboree*.
+- View the generated board.
 - Generate a new map.
-- See the 7 different maps with their names.
+- See the 7 different boards with their names.
 
 If you want to see screenshots of the project, you can check the `demo` folder.
-PS: Try to find the hidden easter egg in the project 🥚.
+PS: Try to find the hidden Easter egg in the project 🥚.
 
 ---
 
@@ -37,9 +37,9 @@ Here is the project structure:
     ├── ...
     ├── pages                       # Every page of the project
     │   ├── Home.js                 # Home page
-    │   ├── Maps.js                 # 7 different maps page
-    │   ├── RandomMap.js            # Random Map generated page
-    │   ├── RandomMapGeneration.js  # Random Map generation page (carousel)
+    │   ├── Boards.js               # 7 different boards page
+    │   ├── RandomBoard.js          # Random Map generated page
+    │   ├── RandomBoardGeneration.js  # Random Map generation page (carousel)
     │   ├── NotFound.md             # Error 404 page
     │   └── ...                     # etc.
     ├── components                  # Every component of the project

@@ -3,21 +3,21 @@ import {Image, View} from "react-native";
 import {useSharedValue, withTiming} from "react-native-reanimated";
 import MarioPartyButton from "../components/ui/MarioPartyButton";
 import * as Haptics from "expo-haptics";
-import {useMapStore} from "../store/store";
 import {globalStyles} from "../styles/globalStyles";
 import useBackgroundSound from '../hooks/useBackgroundSound';
-import RandomMapContainer from "../components/RandomMap/RandomMapContainer";
+import RandomMapContainer from "../components/RandomBoard/RandomBoardContainer";
+import {useBoardStore} from "../store/boardStore";
 
-const RandomMap = () => {
-    const {resetMap, map, generateMap} = useMapStore();
+const RandomBoard = () => {
+    const {resetBoard, board, generateBoard} = useBoardStore();
 
     const {
-        toggleSoundMusic: toggleMapSound,
+        toggleSoundMusic: toggleBoardSound,
         stopSound,
         isLoaded,
         loadSound
     } = useBackgroundSound(
-        map.sound,
+        board.sound,
         true,
         false
     );
@@ -32,21 +32,21 @@ const RandomMap = () => {
     useEffect(() => {
         async function init() {
             await stopSound();
-            if (isLoaded && map.sound) {
-                await toggleMapSound();
+            if (isLoaded && board.sound) {
+                await toggleBoardSound();
             }
         }
 
         init();
-    }, [map.sound]);
+    }, [board.sound]);
 
 
     return (
         <View style={globalStyles.container}>
             {
-                map.boardView ? (
+                board.boardView ? (
                     <Image
-                        source={map.boardView}
+                        source={board.boardView}
                         style={[globalStyles.fullSize, globalStyles.Inset0Element, {
                             resizeMode: "cover",
                         }]}
@@ -87,9 +87,9 @@ const RandomMap = () => {
                                 justifyContent: "center",
                             }}
                             onPress={async () => {
-                                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                                await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
                                 await stopSound();
-                                resetMap();
+                                resetBoard();
                             }}
                         >
                             Retour
@@ -99,15 +99,15 @@ const RandomMap = () => {
                             primary={true}
                             type="forward"
                             onPress={async () => {
-                                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                                await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
                                 opacity.value = withTiming(0, {duration: 200});
                                 infoTranslateX.value = withTiming(-100, {duration: 300});
 
                                 await stopSound();
 
                                 setTimeout(async () => {
-                                    resetMap();
-                                    generateMap(map);
+                                    resetBoard();
+                                    generateBoard(board);
 
                                     infoTranslateX.value = 100;
                                     opacity.value = 0;
@@ -115,9 +115,9 @@ const RandomMap = () => {
                                     infoTranslateX.value = withTiming(0, {duration: 300});
                                     opacity.value = withTiming(1, {duration: 200});
 
-                                    if (map.sound) {
+                                    if (board.sound) {
                                         await loadSound();
-                                        await toggleMapSound();
+                                        await toggleBoardSound();
                                     }
                                 }, 300);
                             }}
@@ -132,4 +132,4 @@ const RandomMap = () => {
     );
 };
 
-export default RandomMap;
+export default RandomBoard;

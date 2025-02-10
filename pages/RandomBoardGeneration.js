@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import LoadingCarousel from "../components/RandomMapGeneration/LoadingCarousel";
+import LoadingCarousel from "../components/RandomBoardGeneration/LoadingCarousel";
 import Animated, {
     Easing,
     useAnimatedStyle,
@@ -10,7 +10,7 @@ import Animated, {
 import {globalStyles} from "../styles/globalStyles";
 import { CAROUSEL_DURATION } from '../constants';
 
-const RandomMapGeneration = () => {
+const RandomBoardGeneration = () => {
     const shuffleTranslateY = useSharedValue(0);
     const opacity = useSharedValue(1);
 
@@ -46,4 +46,4 @@ const RandomMapGeneration = () => {
     );
 };
 
-export default RandomMapGeneration;
+export default RandomBoardGeneration;

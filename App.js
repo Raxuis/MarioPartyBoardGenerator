@@ -1,22 +1,22 @@
 import {View} from 'react-native';
-import {useMapStore, usePageStore} from "./store/store";
 import {useFonts} from "expo-font";
 import {useEffect, useState} from "react";
 import * as SplashScreen from "expo-splash-screen/build/index";
 import Home from "./pages/Home";
-import RandomMap from "./pages/RandomMap";
-import RandomMapGeneration from "./pages/RandomMapGeneration";
-import NotFound from "./pages/NotFound";
+import RandomBoardGeneration from "./pages/RandomBoardGeneration";
+import RandomBoard from "./pages/RandomBoard";
 import {globalStyles} from "./styles/globalStyles";
-import Maps from "./pages/Maps";
 import useBackgroundSound from './hooks/useBackgroundSound';
 import {CAROUSEL_DURATION} from "./constants";
+import {useBoardStore} from "./store/boardStore";
+import {usePageStore} from "./store/pageStore";
+import Boards from "./pages/Boards";
 
 export default function App() {
     const {
-        map,
-        generateMap
-    } = useMapStore();
+        board,
+        generateBoard
+    } = useBoardStore();
 
     const {
         page
@@ -33,10 +33,10 @@ export default function App() {
     );
 
     const {
-        sound: mapsSound,
-        toggleSoundMusic: toggleMapsMusic
+        sound: boardsSound,
+        toggleSoundMusic: toggleBoardsMusic
     } = useBackgroundSound(
-        require('./assets/sounds/maps.mp3'),
+        require('./assets/sounds/boards.mp3'),
         false,
         true
     );
@@ -52,16 +52,16 @@ export default function App() {
         'ShinGoPro-Heavy': require('./assets/fonts/AOTFShinGoProHeavy.otf'),
     });
 
-    const generateRandomMap = async () => {
+    const generateRandomBoard = async () => {
         await toggleRandomLoading();
     };
 
     const toggleRandomLoading = async () => {
         setRandomLoading(true);
 
-        if (mapsSound) {
-            await mapsSound.stopAsync();
-            await mapsSound.setPositionAsync(0);
+        if (boardsSound) {
+            await boardsSound.stopAsync();
+            await boardsSound.setPositionAsync(0);
         }
 
         if (randomSound) {
@@ -71,7 +71,7 @@ export default function App() {
             await randomSound.playAsync();
         }
 
-        await generateMap(map);
+        await generateBoard(board);
 
         setTimeout(async () => {
             setRandomLoading(false);
@@ -96,22 +96,20 @@ export default function App() {
         <View style={globalStyles.container}>
             {
                 page === "home" ?
-                    map.id === 0 && !randomLoading ? (
+                    board.id === 0 && !randomLoading ? (
                         <Home
-                            generateRandomMap={generateRandomMap}
-                            toggleMapsMusic={toggleMapsMusic}
+                            generateRandomBoard={generateRandomBoard}
+                            toggleBoardsMusic={toggleBoardsMusic}
                         />
                     ) : randomLoading ? (
-                        <RandomMapGeneration/>
+                        <RandomBoardGeneration/>
                     ) : (
-                        <RandomMap/>
-                    ) : page === "maps" ? (
-                        <Maps
-                            toggleMapsMusic={toggleMapsMusic}
+                        <RandomBoard/>
+                    ) : page === "boards" ? (
+                        <Boards
+                            toggleBoardsMusic={toggleBoardsMusic}
                         />
-                    ) : (
-                        <NotFound/>
-                    )
+                    ) : null
             }
         </View>
     );

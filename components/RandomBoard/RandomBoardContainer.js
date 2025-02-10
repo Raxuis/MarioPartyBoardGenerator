@@ -8,10 +8,10 @@ import Animated, {
     withSequence,
     useAnimatedStyle,
 } from "react-native-reanimated";
-import {useMapStore} from "../../store/store";
+import {useBoardStore} from "../../store/boardStore";
 
-const RandomMapContainer = ({infoTranslateX, opacity}) => {
-    const {map} = useMapStore();
+const RandomBoardContainer = ({infoTranslateX, opacity}) => {
+    const {board} = useBoardStore();
 
     const iconWidth = useSharedValue(0);
     const iconHeight = useSharedValue(0);
@@ -44,7 +44,7 @@ const RandomMapContainer = ({infoTranslateX, opacity}) => {
             padding: 20,
         }]}>
             <Animated.Image
-                source={map.boardIcon}
+                source={board.boardIcon}
                 style={{
                     width: iconWidth,
                     height: iconHeight,
@@ -65,7 +65,7 @@ const RandomMapContainer = ({infoTranslateX, opacity}) => {
                     animatedTextStyle,
                 ]}
             >
-                {map.name}
+                {board.name}
             </Animated.Text>
             <Animated.Text
                 style={[
@@ -81,10 +81,10 @@ const RandomMapContainer = ({infoTranslateX, opacity}) => {
                     animatedTextStyle,
                 ]}
             >
-                {map.description}
+                {board.description}
             </Animated.Text>
         </View>
     );
 };
 
-export default RandomMapContainer;
+export default RandomBoardContainer;

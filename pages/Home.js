@@ -1,12 +1,12 @@
 import {SafeAreaView, View} from "react-native";
 import MarioPartyButton from "../components/ui/MarioPartyButton";
 import * as Haptics from "expo-haptics";
-import {usePageStore} from "../store/store";
 import {globalStyles} from "../styles/globalStyles";
 import Star from "../components/Star";
 import GameLogo from "../components/GameLogo";
+import {usePageStore} from "../store/pageStore";
 
-export default function Home({toggleMapsMusic, generateRandomMap}) {
+export default function Home({toggleBoardsMusic, generateRandomBoard}) {
     const {setPage} = usePageStore();
 
     return (
@@ -22,8 +22,8 @@ export default function Home({toggleMapsMusic, generateRandomMap}) {
                     primary={true}
                     type={"forward"}
                     onPress={async () => {
-                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-                        await generateRandomMap();
+                        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+                        await generateRandomBoard();
                     }}
                 >
                     Générer une carte
@@ -33,10 +33,10 @@ export default function Home({toggleMapsMusic, generateRandomMap}) {
                     triangle={true}
                     type={"forward"}
                     onPress={async () => {
-                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-                        await toggleMapsMusic();
+                        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+                        await toggleBoardsMusic();
                         setTimeout(() => {
-                            setPage("maps");
+                            setPage("boards");
                         }, 300);
                     }}
                 >

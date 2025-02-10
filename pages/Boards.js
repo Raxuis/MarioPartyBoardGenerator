@@ -1,14 +1,15 @@
 import {SafeAreaView, Text, View, StyleSheet} from "react-native";
 import {NINTENDO_COLOR} from "../constants";
-import MapsDisplay from "../components/Maps/MapsDisplay";
+import BoardsDisplay from "../components/Boards/BoardsDisplay";
 import * as Haptics from "expo-haptics";
 import MarioPartyButton from "../components/ui/MarioPartyButton";
-import {usePageStore, useMapStore} from "../store/store";
 import Animated, {useSharedValue, withTiming} from "react-native-reanimated";
 import {useEffect} from "react";
+import {usePageStore} from "../store/pageStore";
+import {useBoardStore} from "../store/boardStore";
 
-const Maps = ({toggleMapsMusic}) => {
-    const {resetMap} = useMapStore();
+const Boards = ({toggleBoardsMusic}) => {
+    const {resetBoard} = useBoardStore();
     const {setPage} = usePageStore();
     const opacity = useSharedValue(1);
 
@@ -17,14 +18,14 @@ const Maps = ({toggleMapsMusic}) => {
         opacity.value = withTiming(0, {duration: 300});
 
         try {
-            await toggleMapsMusic();
+            await toggleBoardsMusic();
             setTimeout(() => {
-                resetMap();
+                resetBoard();
                 setPage("home");
             }, 300);
         } catch (error) {
             console.error("Error in goBack:", error);
-            resetMap();
+            resetBoard();
             setPage("home");
         }
     }
@@ -43,9 +44,9 @@ const Maps = ({toggleMapsMusic}) => {
                         Les 7 Cartes Disponibles
                     </Text>
                 </View>
-                <View style={styles.mapsWrapper}>
-                    <View style={styles.mapsContainer}>
-                        <MapsDisplay/>
+                <View style={styles.boardsWrapper}>
+                    <View style={styles.boardsContainer}>
+                        <BoardsDisplay/>
                     </View>
                 </View>
 
@@ -94,11 +95,11 @@ const styles = StyleSheet.create({
         flex: 1,
         textAlign: "center",
     },
-    mapsWrapper: {
+    boardsWrapper: {
         flex: 1,
         marginHorizontal: 20,
     },
-    mapsContainer: {
+    boardsContainer: {
         flex: 1,
         borderRadius: 10,
         overflow: "hidden",
@@ -110,4 +111,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Maps;
+export default Boards;

@@ -1,14 +1,14 @@
 import {ScrollView, StyleSheet} from 'react-native';
-import {MAPS} from '../../constants';
+import {boards} from '../../models/boards';
 import AnimatedCard from "./AnimatedCard";
 
-const MapsDisplay = () => {
+const BoardsDisplay = () => {
     return (
         <ScrollView
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
         >
-            {MAPS.map((item, index) => (
+            {boards.map((item, index) => (
                 <AnimatedCard
                     key={index}
                     item={item}
@@ -24,4 +24,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default MapsDisplay;
+export default BoardsDisplay;
